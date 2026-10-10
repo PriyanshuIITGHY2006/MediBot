@@ -1,0 +1,31 @@
+ingredient,rule,routes,list_serial,note
+amidopyrine,any,,1,
+phenacetin,any,,8,
+nialamide,any,,19,
+practolol,any,,20,
+methapyrilene,any,,21,
+methaqualone,any,,22,
+chloral hydrate,any,,42,
+fenfluramine,any,,57,
+dexfenfluramine,any,,58,
+astemizole,any,,73,
+terfenadine,any,,74,list spells "Terfinadine"
+phenformin,any,,75,
+rofecoxib,any,,76,
+valdecoxib,any,,77,
+rimonabant,any,,79,
+rosiglitazone,any,,80,
+cisapride,any,,82,
+sibutramine,any,,85,
+r-sibutramine,any,,86,
+tegaserod,any,,88,
+gatifloxacin,any,oral_solid;oral_liquid;injection,87,systemic use only; eye drops remain legal
+tetracycline,any,oral_liquid,18,liquid oral preparations only
+oxytetracycline,any,oral_liquid,23,liquid oral preparations only
+demeclocycline,any,oral_liquid,24,liquid oral preparations only
+penicillin,any,topical;eye,17,penicillin skin/eye ointment
+analgin,with_any_other,,53,FDC of analgin with any other drug (single-ingredient analgin allowed with conditions)
+metamizole,with_any_other,,53,INN name of analgin
+oxyphenbutazone,with_any_other,,52,
+phenylbutazone,with_any_other,,52,
+chloramphenicol,with_any_other,oral_solid;oral_liquid;injection,14,internal use only

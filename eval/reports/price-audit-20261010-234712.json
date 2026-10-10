@@ -1,0 +1,519 @@
+{
+ "report": {
+  "sampled_products": 30,
+  "pairs": 62,
+  "comparable": 34,
+  "price_match_accuracy": 0.0,
+  "accuracy_by_source": {
+   "snapshot": 0.0
+  },
+  "by_platform": {
+   "1mg": 0.0,
+   "netmeds": 0.0
+  },
+  "live_failed": 8,
+  "no_shown_price": 20
+ },
+ "rows": [
+  {
+   "product": "Lulirx Cream",
+   "platform": "1mg",
+   "shown": 8.71,
+   "live": 170.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9488,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 120.0
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "netmeds",
+   "shown": 335.28,
+   "live": 346.76,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0331,
+   "status": "mismatch"
+  },
+  {
+   "product": "Livoluk Oral Solution",
+   "platform": "1mg",
+   "shown": 1.15,
+   "live": 124.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9907,
+   "status": "mismatch"
+  },
+  {
+   "product": "Livoluk Oral Solution",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 128.5
+  },
+  {
+   "product": "Basalog 100IU/ml Refill Cartridge",
+   "platform": "1mg",
+   "shown": 203.53,
+   "live": 544.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.6259,
+   "status": "mismatch"
+  },
+  {
+   "product": "Keto Cream",
+   "platform": "1mg",
+   "shown": 9.43,
+   "live": 127.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9257,
+   "status": "mismatch"
+  },
+  {
+   "product": "Keto Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 142.0
+  },
+  {
+   "product": "Keto Cream",
+   "platform": "netmeds",
+   "status": "live_failed"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "1mg",
+   "status": "live_failed"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 159.0
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "netmeds",
+   "shown": 220.0,
+   "live": 141.85,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.5509,
+   "status": "mismatch"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "1mg",
+   "shown": 3.65,
+   "live": 66.1,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9448,
+   "status": "mismatch"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 105.0
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "netmeds",
+   "shown": 96.36,
+   "live": 59.81,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.6111,
+   "status": "mismatch"
+  },
+  {
+   "product": "Serutan 212.5mg Tablet",
+   "platform": "1mg",
+   "shown": 8.76,
+   "live": 15.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.416,
+   "status": "mismatch"
+  },
+  {
+   "product": "Bromin Tablet",
+   "platform": "1mg",
+   "shown": 30.0,
+   "live": 32.7,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0826,
+   "status": "mismatch"
+  },
+  {
+   "product": "Bromin Tablet",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 300.0
+  },
+  {
+   "product": "Lulipex 1% Cream",
+   "platform": "1mg",
+   "shown": 12.97,
+   "live": 331.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9608,
+   "status": "mismatch"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "1mg",
+   "shown": 11.26,
+   "live": 290.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9612,
+   "status": "mismatch"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 107.5
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "netmeds",
+   "shown": 450.3,
+   "live": 469.64,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0412,
+   "status": "mismatch"
+  },
+  {
+   "product": "Grandem Injection",
+   "platform": "1mg",
+   "shown": 41.6,
+   "live": 40.1,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0374,
+   "status": "mismatch"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "1mg",
+   "status": "live_failed"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "netmeds",
+   "shown": 157.86,
+   "live": 153.27,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0299,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lulizol Cream",
+   "platform": "1mg",
+   "shown": 12.6,
+   "live": 139.69,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9098,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lulizol Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 206.0
+  },
+  {
+   "product": "Lulizol Cream",
+   "platform": "netmeds",
+   "status": "live_failed"
+  },
+  {
+   "product": "Lofatin Cream",
+   "platform": "1mg",
+   "shown": 10.96,
+   "live": 84.5,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.8703,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lofatin Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 328.5
+  },
+  {
+   "product": "Lofatin Cream",
+   "platform": "netmeds",
+   "status": "live_failed"
+  },
+  {
+   "product": "Ferinject 50mg/ml Solution for Injection",
+   "platform": "1mg",
+   "shown": 313.36,
+   "live": 3682.2,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9149,
+   "status": "mismatch"
+  },
+  {
+   "product": "L-Sys Cream",
+   "platform": "1mg",
+   "shown": 8.5,
+   "live": 273.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9689,
+   "status": "mismatch"
+  },
+  {
+   "product": "L-Sys Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 304.5
+  },
+  {
+   "product": "K-Cit Oral Solution",
+   "platform": "1mg",
+   "shown": 0.94,
+   "live": 305.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9969,
+   "status": "mismatch"
+  },
+  {
+   "product": "K-Cit Oral Solution",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 285.5
+  },
+  {
+   "product": "Jimlig 100 Capsule",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 174.0
+  },
+  {
+   "product": "Jimlig 100 Capsule",
+   "platform": "netmeds",
+   "shown": 186.0,
+   "live": 155.2,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.1985,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lilituf Cream",
+   "platform": "1mg",
+   "shown": 8.42,
+   "live": 228.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9631,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lilituf Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 434.0
+  },
+  {
+   "product": "Lilituf Cream",
+   "platform": "netmeds",
+   "shown": 218.24,
+   "live": 227.35,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0401,
+   "status": "mismatch"
+  },
+  {
+   "product": "Rantac Mps Oral Suspension Elaichi Sugar Free",
+   "platform": "1mg",
+   "status": "live_failed"
+  },
+  {
+   "product": "Glospor Capsule",
+   "platform": "1mg",
+   "shown": 18.5,
+   "live": 17.64,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0488,
+   "status": "mismatch"
+  },
+  {
+   "product": "Meganano Gel",
+   "platform": "1mg",
+   "shown": 4.53,
+   "live": 141.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9679,
+   "status": "mismatch"
+  },
+  {
+   "product": "Meganano Gel",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 933.0
+  },
+  {
+   "product": "Meganano Gel",
+   "platform": "netmeds",
+   "shown": 289.3,
+   "live": 126.02,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 1.2957,
+   "status": "mismatch"
+  },
+  {
+   "product": "Silverkind Nanofine Gel",
+   "platform": "1mg",
+   "shown": 3.66,
+   "live": 59.81,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9388,
+   "status": "mismatch"
+  },
+  {
+   "product": "Lulibet Cream",
+   "platform": "1mg",
+   "status": "live_failed"
+  },
+  {
+   "product": "Lulibet Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 140.5
+  },
+  {
+   "product": "Emluz Cream",
+   "platform": "1mg",
+   "shown": 5.27,
+   "live": 268.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9803,
+   "status": "mismatch"
+  },
+  {
+   "product": "Emluz Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 497.5
+  },
+  {
+   "product": "Emluz Cream",
+   "platform": "netmeds",
+   "shown": 437.98,
+   "live": 442.95,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0112,
+   "status": "mismatch"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "1mg",
+   "shown": 15.96,
+   "live": 234.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9318,
+   "status": "mismatch"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 234.0
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "1mg",
+   "shown": 6.48,
+   "live": 6.07,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.0675,
+   "status": "mismatch"
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 93.0
+  },
+  {
+   "product": "Panthor DX Syrup",
+   "platform": "1mg",
+   "shown": 1.5,
+   "live": 102.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.9853,
+   "status": "mismatch"
+  },
+  {
+   "product": "Panthor DX Syrup",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 92.5
+  },
+  {
+   "product": "Eticort 30 Tablet",
+   "platform": "1mg",
+   "shown": 23.5,
+   "live": 32.0,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.2656,
+   "status": "mismatch"
+  },
+  {
+   "product": "Duovir Tablet",
+   "platform": "1mg",
+   "status": "live_failed"
+  },
+  {
+   "product": "Duovir Tablet",
+   "platform": "apollo",
+   "status": "no_shown_price",
+   "live": 13519.5
+  },
+  {
+   "product": "Duovir Tablet",
+   "platform": "netmeds",
+   "shown": 1417.24,
+   "live": 1203.24,
+   "source": "snapshot",
+   "observed": "2025-03",
+   "rel_diff": 0.1779,
+   "status": "mismatch"
+  }
+ ]
+}

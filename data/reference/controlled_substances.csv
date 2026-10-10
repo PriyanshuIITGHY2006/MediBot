@@ -1,0 +1,48 @@
+ingredient,category,source
+morphine,narcotic,NDPS Act 1985 (narcotic drug)
+codeine,narcotic,NDPS Act 1985 (narcotic drug); Schedule H1 #39
+pholcodine,narcotic,NDPS Act 1985 (narcotic drug)
+dihydrocodeine,narcotic,NDPS Act 1985 (narcotic drug)
+noscapine,narcotic,NDPS Act 1985 (opium alkaloid)
+thebaine,narcotic,NDPS Act 1985 (narcotic drug)
+oxycodone,narcotic,NDPS Act 1985 (narcotic drug)
+hydrocodone,narcotic,NDPS Act 1985 (narcotic drug)
+fentanyl,narcotic,NDPS Act 1985 (narcotic drug)
+pethidine,narcotic,NDPS Act 1985 (narcotic drug)
+methadone,narcotic,NDPS Act 1985 (narcotic drug)
+tapentadol,narcotic,NDPS Act 1985 (narcotic drug)
+tramadol,psychotropic,NDPS Act 1985 (psychotropic substance since 2018); Schedule H1 #44
+buprenorphine,narcotic,NDPS Act 1985; Schedule H1 #3
+pentazocine,psychotropic,NDPS Act 1985; Schedule H1
+butorphanol,psychotropic,NDPS Act 1985
+nalbuphine,psychotropic,NDPS Act 1985
+dextropropoxyphene,narcotic,NDPS Act 1985 (also banned in India)
+diphenoxylate,narcotic,NDPS Act 1985; Schedule H1
+cocaine,narcotic,NDPS Act 1985
+cannabis,narcotic,NDPS Act 1985
+alprazolam,psychotropic,NDPS Act 1985 (psychotropic substance); Schedule H1
+clonazepam,psychotropic,NDPS Act 1985 (psychotropic substance)
+diazepam,psychotropic,NDPS Act 1985 (psychotropic substance); Schedule H1
+lorazepam,psychotropic,NDPS Act 1985 (psychotropic substance)
+chlordiazepoxide,psychotropic,NDPS Act 1985 (psychotropic substance); Schedule H1
+nitrazepam,psychotropic,NDPS Act 1985 (psychotropic substance); Schedule H1
+midazolam,psychotropic,NDPS Act 1985 (psychotropic substance); Schedule H1
+clobazam,psychotropic,NDPS Act 1985 (psychotropic substance)
+etizolam,psychotropic,NDPS Act 1985 (psychotropic substance)
+flurazepam,psychotropic,NDPS Act 1985 (psychotropic substance)
+oxazepam,psychotropic,NDPS Act 1985 (psychotropic substance)
+temazepam,psychotropic,NDPS Act 1985 (psychotropic substance)
+zolpidem,psychotropic,NDPS Act 1985 (psychotropic substance); Schedule H1
+zopiclone,psychotropic,NDPS Act 1985 (psychotropic substance)
+eszopiclone,psychotropic,NDPS Act 1985 (psychotropic substance)
+phenobarbitone,psychotropic,NDPS Act 1985 (psychotropic substance)
+phenobarbital,psychotropic,NDPS Act 1985 (psychotropic substance)
+ketamine,psychotropic,NDPS Act 1985; Schedule X
+methylphenidate,psychotropic,NDPS Act 1985; Schedule X
+modafinil,psychotropic,Habit-forming stimulant (treated as controlled)
+armodafinil,psychotropic,Habit-forming stimulant (treated as controlled)
+amphetamine,psychotropic,NDPS Act 1985; Schedule X
+dexamphetamine,psychotropic,NDPS Act 1985; Schedule X
+meprobamate,psychotropic,NDPS Act 1985; Schedule X
+pregabalin,psychotropic,Proposed for Schedule H1 (2026 draft); misuse-prone — treated as controlled
+gabapentin,psychotropic,Misuse-prone — treated as controlled

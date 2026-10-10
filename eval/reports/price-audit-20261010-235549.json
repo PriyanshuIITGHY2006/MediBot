@@ -1,0 +1,772 @@
+{
+ "report": {
+  "sampled_products": 40,
+  "pairs": 80,
+  "comparable": 70,
+  "price_match_accuracy": 1.0,
+  "accuracy_by_source": {
+   "cached": 1.0
+  },
+  "by_platform": {
+   "1mg": 1.0,
+   "apollo": 1.0,
+   "netmeds": 1.0
+  },
+  "live_failed": 2,
+  "delisted": 8,
+  "not_comparable": 0,
+  "no_shown_price": 0
+ },
+ "rows": [
+  {
+   "product": "Lulirx Cream",
+   "platform": "1mg",
+   "shown": 170.0,
+   "live": 170.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:43+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "apollo",
+   "shown": 120.0,
+   "live": 120.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:45+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "netmeds",
+   "shown": 5.78,
+   "live": 5.78,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:45+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Livoluk Oral Solution",
+   "platform": "1mg",
+   "shown": 124.0,
+   "live": 124.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:10+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Livoluk Oral Solution",
+   "platform": "apollo",
+   "shown": 128.5,
+   "live": 128.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:10+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Basalog 100IU/ml Refill Cartridge",
+   "platform": "1mg",
+   "shown": 544.0,
+   "live": 544.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:59+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Cream",
+   "platform": "1mg",
+   "shown": 127.0,
+   "live": 127.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:08+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Cream",
+   "platform": "apollo",
+   "shown": 142.0,
+   "live": 142.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:09+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Cream",
+   "platform": "netmeds",
+   "shown": 7.48,
+   "live": 7.48,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:10+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "apollo",
+   "shown": 159.0,
+   "live": 159.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "netmeds",
+   "shown": 4.73,
+   "live": 4.73,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "1mg",
+   "shown": 66.1,
+   "live": 66.1,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:59+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "apollo",
+   "shown": 105.0,
+   "live": 105.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:00+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "netmeds",
+   "shown": 3.99,
+   "live": 3.99,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:00+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Serutan 212.5mg Tablet",
+   "platform": "1mg",
+   "shown": 15.0,
+   "live": 15.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:17+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Bromin Tablet",
+   "platform": "1mg",
+   "shown": 32.7,
+   "live": 32.7,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:57+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Bromin Tablet",
+   "platform": "apollo",
+   "shown": 30.0,
+   "live": 30.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:58+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulipex 1% Cream",
+   "platform": "1mg",
+   "shown": 331.0,
+   "live": 331.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:27+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "1mg",
+   "shown": 290.0,
+   "live": 290.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:22+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "apollo",
+   "shown": 107.5,
+   "live": 107.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:22+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "netmeds",
+   "shown": 9.39,
+   "live": 9.39,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:24+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Grandem Injection",
+   "platform": "1mg",
+   "shown": 40.1,
+   "live": 40.1,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:18+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "netmeds",
+   "shown": 15.33,
+   "live": 15.33,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:44+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulizol Cream",
+   "platform": "1mg",
+   "shown": 139.69,
+   "live": 139.69,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:11+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulizol Cream",
+   "platform": "apollo",
+   "shown": 206.0,
+   "live": 206.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulizol Cream",
+   "platform": "netmeds",
+   "status": "live_failed"
+  },
+  {
+   "product": "Lofatin Cream",
+   "platform": "1mg",
+   "shown": 84.5,
+   "live": 84.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:25+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lofatin Cream",
+   "platform": "apollo",
+   "shown": 328.5,
+   "live": 328.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:26+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lofatin Cream",
+   "platform": "netmeds",
+   "status": "live_failed"
+  },
+  {
+   "product": "Ferinject 50mg/ml Solution for Injection",
+   "platform": "1mg",
+   "shown": 3682.2,
+   "live": 3682.2,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:33+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "L-Sys Cream",
+   "platform": "1mg",
+   "shown": 273.0,
+   "live": 273.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:10+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "L-Sys Cream",
+   "platform": "apollo",
+   "shown": 304.5,
+   "live": 304.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:09+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "K-Cit Oral Solution",
+   "platform": "1mg",
+   "shown": 305.0,
+   "live": 305.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:51+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "K-Cit Oral Solution",
+   "platform": "apollo",
+   "shown": 285.5,
+   "live": 285.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:52+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Jimlig 100 Capsule",
+   "platform": "apollo",
+   "shown": 17.4,
+   "live": 17.4,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:03+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Jimlig 100 Capsule",
+   "platform": "netmeds",
+   "shown": 15.52,
+   "live": 15.52,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:04+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lilituf Cream",
+   "platform": "1mg",
+   "shown": 228.0,
+   "live": 228.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:44+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lilituf Cream",
+   "platform": "apollo",
+   "shown": 434.0,
+   "live": 434.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:47+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lilituf Cream",
+   "platform": "netmeds",
+   "shown": 15.16,
+   "live": 15.16,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:47+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Rantac Mps Oral Suspension Elaichi Sugar Free",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Glospor Capsule",
+   "platform": "1mg",
+   "shown": 17.64,
+   "live": 17.64,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:11+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Meganano Gel",
+   "platform": "1mg",
+   "shown": 141.0,
+   "live": 141.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:40+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Meganano Gel",
+   "platform": "apollo",
+   "shown": 933.0,
+   "live": 933.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:40+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Meganano Gel",
+   "platform": "netmeds",
+   "shown": 8.4,
+   "live": 8.4,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:42+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Silverkind Nanofine Gel",
+   "platform": "1mg",
+   "shown": 59.81,
+   "live": 59.81,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:25+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulibet Cream",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Lulibet Cream",
+   "platform": "apollo",
+   "shown": 140.5,
+   "live": 140.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:06+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Emluz Cream",
+   "platform": "1mg",
+   "shown": 268.0,
+   "live": 268.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Emluz Cream",
+   "platform": "apollo",
+   "shown": 497.5,
+   "live": 497.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:51+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Emluz Cream",
+   "platform": "netmeds",
+   "shown": 11.07,
+   "live": 11.07,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:51+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "1mg",
+   "shown": 234.0,
+   "live": 234.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:24+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "apollo",
+   "shown": 234.0,
+   "live": 234.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:25+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "1mg",
+   "shown": 6.07,
+   "live": 6.07,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:48+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "apollo",
+   "shown": 6.2,
+   "live": 6.2,
+   "source": "cached",
+   "observed": "2026-10-10T18:19:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Panthor DX Syrup",
+   "platform": "1mg",
+   "shown": 102.0,
+   "live": 102.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Panthor DX Syrup",
+   "platform": "apollo",
+   "shown": 92.5,
+   "live": 92.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Eticort 30 Tablet",
+   "platform": "1mg",
+   "shown": 32.0,
+   "live": 32.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:38+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Duovir Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Duovir Tablet",
+   "platform": "apollo",
+   "shown": 1351.95,
+   "live": 1351.95,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:59+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Duovir Tablet",
+   "platform": "netmeds",
+   "shown": 20.05,
+   "live": 20.05,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:00+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Vintel 40 Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Vintel 40 Tablet",
+   "platform": "apollo",
+   "shown": 7.07,
+   "live": 7.07,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:10+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Pregastar Plus SR 75 Tablet",
+   "platform": "1mg",
+   "shown": 11.4,
+   "live": 11.4,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:21+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Pregastar Plus SR 75 Tablet",
+   "platform": "apollo",
+   "shown": 21.8,
+   "live": 21.8,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:21+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tiova Rotacap",
+   "platform": "1mg",
+   "shown": 10.5,
+   "live": 10.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:27+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tiova Rotacap",
+   "platform": "apollo",
+   "shown": 343.0,
+   "live": 343.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:29+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tiova Rotacap",
+   "platform": "netmeds",
+   "shown": 10.19,
+   "live": 10.19,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:29+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Konaz -CT Lotion",
+   "platform": "1mg",
+   "shown": 229.0,
+   "live": 229.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:20+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Montina-L Syrup",
+   "platform": "1mg",
+   "shown": 50.1,
+   "live": 50.1,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:27+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Rabetero-L Capsule SR",
+   "platform": "1mg",
+   "shown": 8.73,
+   "live": 8.73,
+   "source": "cached",
+   "observed": "2026-10-10T18:21:29+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Smulax Liquid",
+   "platform": "1mg",
+   "shown": 110.0,
+   "live": 110.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:19+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Smulax Liquid",
+   "platform": "apollo",
+   "shown": 132.0,
+   "live": 132.0,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:19+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Smulax Liquid",
+   "platform": "netmeds",
+   "shown": 1.03,
+   "live": 1.03,
+   "source": "cached",
+   "observed": "2026-10-10T18:22:20+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glyciphage-PG 1 Tablet SR",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Atorfit 10 Tablet",
+   "platform": "apollo",
+   "shown": 5.43,
+   "live": 5.43,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:31+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Atorfit 10 Tablet",
+   "platform": "netmeds",
+   "shown": 4.73,
+   "live": 4.73,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:31+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Sufrate Ssd Cream",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Sufrate Ssd Cream",
+   "platform": "apollo",
+   "shown": 154.5,
+   "live": 154.5,
+   "source": "cached",
+   "observed": "2026-10-10T18:20:05+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  }
+ ]
+}

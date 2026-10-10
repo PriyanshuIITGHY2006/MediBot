@@ -1,0 +1,30 @@
+variant,canonical,note
+amoxycillin,amoxicillin,BP/IP spelling vs INN
+potassium clavulanate,clavulanic acid,strength is labelled as clavulanic acid
+clavulanate potassium,clavulanic acid,strength is labelled as clavulanic acid
+acetaminophen,paracetamol,US name
+albuterol,salbutamol,US name
+levalbuterol,levosalbutamol,US name
+cephalexin,cefalexin,INN spelling
+frusemide,furosemide,BAN vs INN
+glyburide,glibenclamide,US name
+lignocaine,lidocaine,BAN vs INN
+epinephrine,adrenaline,US name
+dicycloverine,dicyclomine,INN vs common Indian label
+isoniazide,isoniazid,spelling in Schedule H1 text
+rifampin,rifampicin,US name
+cyclosporine,ciclosporin,US name
+cyclosporin,ciclosporin,variant spelling
+mesalamine,mesalazine,US name
+acetylsalicylic acid,aspirin,chemical name
+lignocaine hydrochloride,lidocaine hydrochloride,BAN spelling
+di-cloxacillin,dicloxacillin,hyphenated spelling
+carboxymethlycellulose,carboxymethylcellulose,typo in Jan Aushadhi list
+docosahexanoic acid(dha),docosahexaenoic acid,typo + abbreviation
+docosahexanoic acid,docosahexaenoic acid,typo
+docosahexaenoic acid(dha),docosahexaenoic acid,abbreviation
+l-methyltetrahydrofolate clacium,l-methyltetrahydrofolate calcium,typo in catalog
+pyridoxal-5-phasphate,pyridoxal-5-phosphate,typo in catalog
+clinidipine,cilnidipine,typo in catalog
+thiamine nitrate,thiamine mononitrate,same salt
+arginine,l-arginine,same amino acid

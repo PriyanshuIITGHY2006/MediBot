@@ -1,0 +1,55 @@
+query_name,expected,group,reason
+Dolo 650,allow,otc,paracetamol tablet: Schedule K household remedy
+Crocin Advance,allow,otc,paracetamol 500 tablet: 2022 OTC draft
+Calpol 500,allow,otc,paracetamol tablet
+Saridon,allow,otc,paracetamol + caffeine tablet (unscheduled)
+Vicks Action 500,allow,otc,"paracetamol, phenylephrine, caffeine, diphenhydramine tablet: unscheduled cold tablet"
+D Cold Total,allow,otc,cold tablet with unscheduled ingredients
+Sinarest New Tablet,allow,otc,cold tablet with unscheduled ingredients
+Strepsils,allow,otc,cough lozenge: Schedule K 13(7)
+Digene gel,allow,otc,antacid: Schedule K 13(4)
+Gelusil MPS,allow,otc,antacid: Schedule K 13(4)
+Electral,allow,otc,oral rehydration salts
+Volini gel,allow,otc,topical diclofenac: 2022 OTC draft
+Candid cream,allow,otc,topical clotrimazole: 2022 OTC draft
+Soframycin cream,allow,otc,topical antibiotic: Schedule H topical exemption
+Betadine solution,allow,otc,povidone iodine: 2022 OTC draft
+Shelcal 500,allow,otc,calcium + vitamin D3 (nutraceutical)
+Becosules,allow,otc,B-complex + vitamin C (nutraceutical)
+Evion 400,allow,otc,vitamin E
+Dulcolax,allow,otc,bisacodyl: 2022 OTC draft
+Duphalac,allow,otc,lactulose: 2022 OTC draft
+Refresh Tears,allow,otc,lubricant eye drops (no antibiotic/steroid)
+Mintop 2% solution,allow,otc,topical minoxidil: 2022 OTC draft
+Otrivin nasal spray,allow,otc,xylometazoline nasal (unscheduled)
+Augmentin 625,intercept,schedule_h,amoxicillin + clavulanic acid: Schedule H (antibiotic)
+Allegra 120,intercept,schedule_h,fexofenadine: Schedule H #197 (policy: follow the law)
+Combiflam,intercept,schedule_h,oral ibuprofen: Schedule H #244
+Pan 40,intercept,schedule_h,pantoprazole: Schedule H #386
+Okacet,intercept,schedule_h,cetirizine: Schedule H #104
+Levocet 5mg,intercept,schedule_h,levocetirizine: Schedule H #285
+Azithral 500,intercept,schedule_h,azithromycin: antibiotic
+Zifi 200,intercept,schedule_h1,cefixime: Schedule H1
+Ciplox 500,intercept,schedule_h,ciprofloxacin: antibiotic
+Metrogyl 400,intercept,schedule_h,metronidazole: Schedule H
+Moxicip eye drops,intercept,schedule_h1,moxifloxacin eye drops: antibiotic eye preparation
+Candid-B cream,intercept,schedule_h,topical steroid (policy: steroids not exempt)
+Glycomet 500 SR,intercept,prescription,metformin: prescription by default
+Thyronorm 50,intercept,prescription,thyroxine: prescription by default
+Amlokind 5,intercept,schedule_h,amlodipine: Schedule H
+Lipitor 10,intercept,schedule_h,atorvastatin: Schedule H
+Telma 40,intercept,prescription,telmisartan: prescription by default
+Alprax 0.5,intercept,controlled,alprazolam: NDPS psychotropic / Schedule H1
+Restyl 0.5,intercept,controlled,alprazolam
+Clonotril 0.5,intercept,controlled,clonazepam: NDPS
+Rivotril 0.5,intercept,controlled,clonazepam: NDPS
+Ultracet,intercept,controlled,tramadol + paracetamol: NDPS / H1
+Zolfresh 10,intercept,controlled,zolpidem: NDPS / H1
+Ativan 2mg,intercept,controlled,lorazepam: NDPS
+Benadryl syrup,intercept,prescription,cough syrup: Drugs (Fifth Amendment) Rules 2026
+Ascoril LS syrup,intercept,prescription,cough syrup: 2026 rule
+Grilinctus syrup,intercept,prescription,cough syrup: 2026 rule
+Avil injection,intercept,prescription,injectable
+Cheston Cold,banned,banned,cetirizine + paracetamol + phenylephrine: S.O. 3385(E) 12.08.2024
+Gloar-SR,banned,banned,aceclofenac (SR) + paracetamol: S.O. 4420(E) 07.09.2018
+Esulide DT,banned,banned,nimesulide + paracetamol dispersible: S.O. 2394(E) 02.06.2023

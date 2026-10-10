@@ -1,0 +1,51 @@
+a,b,expected,reason
+Augmentin 625 Duo Tablet,Moxikind-CV 625 Tablet,same,PS sandbox example
+Augmentin 625 Duo Tablet,Clavam 625 Tablet,same,PS sandbox example
+Moxikind-CV 625 Tablet,Clavam 625 Tablet,same,transitive
+Dolo 650 Tablet,Calpol 650mg Tablet,same,paracetamol 650
+Dolo 650 Tablet,Pacimol 650 Tablet,same,paracetamol 650
+Crocin Advance Tablet,Calpol 500mg Tablet,same,paracetamol 500
+PAN 40 Tablet,Pantop 40 Tablet,same,pantoprazole 40
+Allegra 120mg Tablet,Fevifex 120mg Tablet,same,fexofenadine 120
+Azithral 500 Tablet,Azee 500 Tablet,same,azithromycin 500
+Azithral 500 Tablet,Zithrox 500 Tablet,same,azithromycin 500
+Lipitor 10mg Tablet,Storvas 10 Tablet,same,atorvastatin 10
+Thyronorm 50mcg Tablet,Eltroxin 50mcg Tablet,same,thyroxine 50 mcg
+Omez 20mg Capsule,Ocid 20 Capsule,same,omeprazole 20 capsule
+Rantac 150 Tablet,Aciloc 150 Tablet,same,ranitidine 150
+Levocet 5mg Tablet,Teczine Tablet,same,levocetirizine 5
+Combiflam Tablet,Ibugesic Plus Tablet,same,ibuprofen 400 + paracetamol 325
+Teczine M Tablet,Montek LC Tablet,same,levocetirizine 5 + montelukast 10
+Met XL 25 Tablet,Metolar XR 25 Capsule,different,same salt and release but tablet vs capsule
+Augmentin 625 Duo Tablet,Augmentin 1000 Duo Tablet,different,strength 500 vs 875
+Augmentin 625 Duo Tablet,Augmentin Duo Oral Suspension,different,tablet vs suspension
+Augmentin 625 Duo Tablet,Augmentin 375 Tablet,different,strength 500 vs 250
+Dolo 650 Tablet,Crocin Advance Tablet,different,650 vs 500
+Calpol 500mg Tablet,Calpol 250mg Tablet,different,500 vs 250
+Allegra 120mg Tablet,Allegra 180mg Tablet,different,120 vs 180
+Cheston Cold Tablet,Cheston Cold Total Tablet,different,3 vs 4 ingredients
+Zerodol-P Tablet,Zerodol-SP Tablet,different,extra serratiopeptidase
+Zerodol-P Tablet,Zerodol Tablet,different,extra paracetamol
+Zerodol-MR Tablet,Zerodol TH 4 Tablet,different,tizanidine vs thiocolchicoside
+Telma 40 Tablet,Telma H Tablet,different,extra hydrochlorothiazide
+Metolar 25 Tablet,Metolar XR 25 Capsule,different,tartrate IR vs succinate ER
+Ecosprin 75 Tablet,Ecosprin 150 Tablet,different,75 vs 150
+Teczine Tablet,Teczine 10 Tablet,different,5 vs 10
+Teczine Tablet,Teczine M Tablet,different,extra montelukast
+Ibugesic Plus Tablet,Ibugesic Plus NF 50mg/500mg Tablet,different,ibuprofen vs diclofenac
+Ibugesic Plus Tablet,Ibugesic Plus Oral Suspension Orange,different,tablet vs suspension
+Azithral 500 Tablet,Azithral 500mg Injection,different,tablet vs injection
+Alprax 0.5mg Tablet,Alprax 0.25 Tablet,different,0.5 vs 0.25
+Alprax 0.5mg Tablet,Restyl 0.5mg Tablet SR,different,IR vs SR
+Alprax 0.5mg Tablet,Alprax Forte 0.5 mg/50 mg Tablet,different,extra sertraline
+Restyl 0.5mg Tablet,Alprax 0.5mg Tablet,same,alprazolam 0.5
+Glycomet 500 SR Tablet,Glycomet 500 Tablet,different,SR vs IR (if present)
+Sinarest New Tablet,Cheston Cold Tablet,different,chlorpheniramine vs cetirizine
+Sinarest New Tablet,Sinarest New Nasal Spray,different,different product entirely
+Rantac 150 Tablet,Omez 20mg Capsule,different,different drug
+Lipitor 10mg Tablet,Storvas 10 CP Tablet,same,atorvastatin 10 (brand suffix CP only)
+Amlokind 5 Tablet,Lipitor 10mg Tablet,different,different drug
+Telma H Tablet,Telma 40 Tablet,different,reverse order check
+Moxikind-CV 625 Tablet,Augmentin 1000 Duo Tablet,different,strength
+Calpol 650mg Tablet,Calpol 650 + Tablet,same,same composition different listing
+Fevifex 120mg Tablet,Allegra 180mg Tablet,different,120 vs 180
