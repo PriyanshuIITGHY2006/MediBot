@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">MediBot favicon</title><desc id="desc">Compact MediBot chat and medical cross icon for browser tabs.</desc>
+<style>
+  :root { color-scheme: light; }
+  .line { fill:none; stroke:#15384B; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
+  .teal-line { fill:none; stroke:#0DA99E; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
+  .navy { fill:#15384B; }
+  .teal { fill:#0DA99E; }
+  .pale { fill:#E7F8F5; }
+  .mint { fill:#19C6B4; }
+  .pulse { transform-box:fill-box; transform-origin:center; animation:pulse 2.5s ease-in-out infinite; }
+  .breathe { transform-box:fill-box; transform-origin:center; animation:breathe 3.2s ease-in-out infinite; }
+  .float { animation:float 3s ease-in-out infinite; }
+  .draw { stroke-dasharray:100; stroke-dashoffset:100; animation:draw 2.8s ease-in-out infinite; }
+  .blink { animation:blink 1.4s ease-in-out infinite; }
+  .spin { transform-box:fill-box; transform-origin:center; animation:spin 7s linear infinite; }
+  .wave { transform-box:fill-box; transform-origin:center; animation:wave 2.2s ease-in-out infinite; }
+  .delay1 { animation-delay:.2s; }
+  .delay2 { animation-delay:.4s; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.08);opacity:.82} }
+  @keyframes breathe { 0%,100%{opacity:.65} 50%{opacity:1} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+  @keyframes draw { 0%{stroke-dashoffset:100} 48%,78%{stroke-dashoffset:0} 100%{stroke-dashoffset:-100} }
+  @keyframes blink { 0%,70%,100%{opacity:1} 82%{opacity:.2} }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  @keyframes wave { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-5deg)} 65%{transform:rotate(5deg)} }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
+</style>
+<rect x="7" y="7" width="114" height="114" rx="31" fill="#F5FBFA"/>
+<path d="M36 22H91C104.3 22 115 32.7 115 46V75C115 88.3 104.3 99 91 99H63L43 114V99H36C22.7 99 12 88.3 12 75V46C12 32.7 22.7 22 36 22Z" stroke="#15384B" stroke-width="6.5" stroke-linejoin="round"/>
+<circle cx="64" cy="62" r="25" fill="#E7F8F5"/>
+<path d="M59 44H69V57H82V67H69V80H59V67H46V57H59Z" fill="#0DA99E" class="pulse"/>
+<circle cx="101" cy="25" r="6" fill="#19C6B4" class="pulse"/>
+</svg>

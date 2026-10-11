@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/source-serif-4";
+
+/* MediBot design tokens. Brand: navy #15384B, teal #0DA99E, mint #19C6B4, pale #E7F8F5 (from the logo).
+   Inter for interface + wordmark, Source Serif 4 for what MediBot says (calm, readable long-form answers). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, Cambria, serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  --color-paper: #f7f9f8;        /* app background: off-white with a breath of mint */
+  --color-sheet: #ffffff;        /* surfaces */
+  --color-ink: #17262d;          /* body text */
+  --color-navy: #15384b;         /* brand navy: headings, user-facing emphasis */
+  --color-ink-2: #4a5b63;
+  --color-ink-3: #7d8f96;
+  --color-line: #e3eaea;
+  --color-line-2: #cdd9d9;
+  --color-teal: #0da99e;         /* brand accent (fills, icons) */
+  --color-mint: #19c6b4;
+  --color-pale: #e7f8f5;         /* brand pale: user bubble, soft fills */
+  --color-green: #0a7c74;        /* teal for TEXT (AA on white): verified, savings */
+  --color-green-soft: #e7f8f5;
+  --color-amber: #9a5b06;
+  --color-amber-soft: #fdf3e1;
+  --color-red: #b42318;          /* prescription stamp, emergency */
+  --color-red-soft: #fdeceb;
+  --color-focus: #0da99e;
+
+  --radius-card: 14px;
+  --radius-chip: 999px;
+  --shadow-soft: 0 1px 2px rgb(21 56 75 / 0.05), 0 6px 24px -8px rgb(21 56 75 / 0.12);
+}
+
+.dark {
+  --color-paper: #0d1416;
+  --color-sheet: #131d20;
+  --color-ink: #e4eeee;
+  --color-navy: #eaf4f4;
+  --color-ink-2: #a8babe;
+  --color-ink-3: #73878c;
+  --color-line: #223033;
+  --color-line-2: #2f4044;
+  --color-teal: #19c6b4;
+  --color-mint: #3fd8c6;
+  --color-pale: #12302d;
+  --color-green: #4fd6c5;
+  --color-green-soft: #11302c;
+  --color-amber: #f0b354;
+  --color-amber-soft: #2a2112;
+  --color-red: #f58a7c;
+  --color-red-soft: #2e1714;
+  --color-focus: #19c6b4;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 28px -10px rgb(0 0 0 / 0.55);
+}
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01", "ss03";   /* Inter: single-storey a off, open digits, round quotes */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 8px; }
+  ::selection { background: color-mix(in oklab, var(--color-teal) 25%, transparent); }
+}
+
+/* money and counts: Inter's tabular figures (aligned columns, real ₹ glyph) */
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum", "cv11"; letter-spacing: -0.005em; }
+/* MediBot's own words */
+.say { font-family: var(--font-serif); font-size: 16.5px; line-height: 1.65; font-optical-sizing: auto; color: var(--color-ink); }
+.say-sm { font-family: var(--font-serif); font-size: 15px; line-height: 1.6; }
+.display { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.015em; font-optical-sizing: auto; }
+
+/* receipt leaders: "Tata 1mg ........ ₹183.00" */
+.leader { flex: 1; border-bottom: 1px dotted var(--color-line-2); margin: 0 .6rem; transform: translateY(-4px); min-width: 1rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise .28s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+  .mb-pulse { transform-box: fill-box; transform-origin: center; animation: mbpulse 1.6s ease-in-out infinite; }
+  @keyframes mbpulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.12); opacity: .75 } }
+  .mb-dot { animation: mbdot 1.6s ease-in-out infinite; }
+  @keyframes mbdot { 0%,100% { opacity: .35 } 50% { opacity: 1 } }
+}

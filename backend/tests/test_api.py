@@ -124,3 +124,18 @@ def test_optimize_bill(client):
 def test_health(client):
     h = client.get("/health").json()
     assert h["status"] == "ok" and h["catalog_products"] > 100000
+
+
+def test_search_and_medicine_sheet(client):
+    hits = client.get("/api/v1/search", params={"q": "augmentin 625"}).json()["results"]
+    assert hits and hits[0]["name"].startswith("Augmentin 625")
+    sheet = client.get(f"/api/v1/medicine/{hits[0]['product_id']}").json()
+    assert sheet["mandated_prompt"] == msg.MANDATED_PROMPT and sheet["schedule"].startswith("Schedule H")
+    assert sheet["substitutes"]["rows"] and all(r["composition_identically_verified"] for r in sheet["substitutes"]["rows"])
+    assert sheet["info"] is None or sheet["info"]["citations"]
+    otc = client.get("/api/v1/search", params={"q": "dolo 650"}).json()["results"][0]
+    s2 = client.get(f"/api/v1/medicine/{otc['product_id']}").json()
+    assert s2["mandated_prompt"] is None and s2["info"]["citations"]
+    assert client.get("/api/v1/medicine/../../etc").status_code in (404, 422)
+    assert client.get("/api/v1/medicine/p_doesnotexist").status_code == 404
+    assert client.get("/api/v1/search", params={"q": "a"}).json()["results"] == []

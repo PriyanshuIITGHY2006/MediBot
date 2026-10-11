@@ -89,3 +89,7 @@ api:
 
 eval-http:
 	MEDIBOT_API=$${MEDIBOT_API:-http://127.0.0.1:8000} PYTHONPATH=backend:. $(PY) eval/run.py --bot eval.http_bot:HttpBot --tag http
+
+## Phase 13-14 web app (needs `make api` running): http://localhost:5173
+web:
+	cd web && npm install && npx vite --host 127.0.0.1 --port 5173

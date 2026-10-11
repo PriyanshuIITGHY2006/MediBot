@@ -34,7 +34,7 @@ from medibot.safety import messages as msg
 log = logging.getLogger("medibot.api")
 MAX_CHARS = int(os.environ.get("MEDIBOT_MAX_INPUT_CHARS", "1000"))
 RATE = int(os.environ.get("MEDIBOT_RATE_PER_MIN", "30"))          # requests per minute per client
-ORIGINS = [o for o in os.environ.get("MEDIBOT_CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",") if o]
+ORIGINS = [o for o in os.environ.get("MEDIBOT_CORS_ORIGINS", "http://localhost:3000,http://localhost:5173,http://127.0.0.1:5173,http://127.0.0.1:4173,http://localhost:4173").split(",") if o]
 SCHEDULE_LABEL = {"schedule_h": "Schedule H", "schedule_h1": "Schedule H1", "schedule_x": "Schedule X",
                   "controlled": "Controlled (NDPS)", "prescription": "Prescription only", "banned": "Banned (Section 26A)",
                   "otc": "OTC", "otc_unverified": "OTC (composition not verified)", "unknown": "Prescription by default"}
@@ -269,3 +269,76 @@ def metrics():
 def optimize(body: OptimizeIn):
     from medibot.optimizer import optimize_bill
     return optimize_bill(bot(), [(i.name, i.quantity) for i in body.items])
+
+
+# ---------------------------------------------------------------- Live Medicine Sheet + ⌘K search (Phase 14)
+_images: dict | None = None
+
+
+def image_of(product_id: str) -> str | None:
+    global _images
+    if _images is None:
+        import pandas as pd
+        from medibot.catalog import P
+        t = pd.read_parquet(P / "products.parquet", columns=["product_id", "image_url"]).dropna()
+        _images = dict(zip(t["product_id"], t["image_url"]))
+    return _images.get(product_id)
+
+
+@app.get("/api/v1/search")
+def search(q: str = "", limit: int = 8):
+    q = re.sub(r"[\x00-\x1f\x7f]", " ", q).strip()[:80]
+    if len(q) < 2:
+        return {"query": q, "results": []}
+    cat = bot().catalog
+    out, seen = [], set()
+    for m in cat.index.resolve(q, max(1, min(limit, 15)) * 2):
+        if m.kind != "product" or m.product_id in seen or m.product_id not in cat.products:
+            continue
+        seen.add(m.product_id)
+        p = cat.products[m.product_id]
+        out.append({"product_id": p.product_id, "name": p.name, "composition": p.composition, "form": p.form,
+                    "schedule": SCHEDULE_LABEL.get(p.category, p.category), "requires_prescription": p.requires_prescription,
+                    "confident": m.confident})
+        if len(out) >= limit:
+            break
+    return {"query": q, "results": out}
+
+
+@app.get("/api/v1/medicine/{product_id}")
+def medicine(product_id: str):
+    """Everything the Live Medicine Sheet shows for one product. Same safety rules as the chat: the mandated prompt
+    for restricted medicines, no doses, cited information only, identical substitutes only."""
+    if not re.fullmatch(r"[A-Za-z0-9_-]{3,40}", product_id):
+        return JSONResponse({"error": "bad product id"}, status_code=422)
+    from medibot.assistant import habit_forming, habit_forming_set, price_book
+    from medibot.health.answer import answer_medicine, render_sources
+    from medibot.substitutes import find_substitutes, refresh_with_live
+    b = bot()
+    p = b.catalog.products.get(product_id)
+    if p is None:
+        return JSONResponse({"error": "not found"}, status_code=404)
+    info = answer_medicine(p.name, p.composition, p.ingredients, "uses and side effects",
+                           habit_forming=habit_forming(p.product_id) if p.product_id else None,
+                           sections_override=["uses", "side_effects", "how_it_works"], product_id=p.product_id,
+                           form=p.form) if p.ingredients else None
+    subs = refresh_with_live(find_substitutes(p, b.catalog, price_book()), b.catalog, b.prices) \
+        if p.composition_id and p.category != "banned" else None
+    return {
+        "product_id": p.product_id, "name": p.name, "manufacturer": p.manufacturer, "form": p.form,
+        "composition": p.composition, "composition_id": p.composition_id,
+        "schedule": SCHEDULE_LABEL.get(p.category, p.category), "category": p.category,
+        "requires_prescription": p.requires_prescription, "banned": p.category == "banned",
+        "mandated_prompt": msg.MANDATED_PROMPT if p.requires_prescription or p.category == "banned" else None,
+        "safety_reason": p.reasons, "legal_refs": p.legal_refs,
+        "therapeutic_class": therapeutic_class(p.product_id),
+        "habit_forming": habit_forming(p.product_id) if p.ingredients else None,
+        "image_url": image_of(p.product_id), "image_credit": "Image: Tata 1mg" if image_of(p.product_id) else None,
+        "info": None if not info else {"text": info.text, "sections": info.sections, "missing": info.missing,
+                                       "citations": [c.as_contract() for c in info.citations]},
+        "prices": b.prices.quotes(p) if p.category != "banned" else [],
+        "substitutes": None if subs is None else {
+            "current_price_per_unit_inr": subs.target_price_per_unit, "pack_unit": subs.pack_unit, "note": subs.note,
+            "rows": [s.as_contract() for s in subs.substitutes]},
+        "disclaimer": msg.SHORT_DISCLAIMER,
+    }

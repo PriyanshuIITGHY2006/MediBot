@@ -77,6 +77,7 @@ def safe_sentences(text: str, max_sents: int = 3, max_chars: int = 420) -> str |
     out, n = [], 0
     for s in re.split(r"(?<=[.!?])\s+", text):
         s = s.strip()
+        s = re.sub(r"^(Data\s+)?(Human|Animal|Clinical|Pregnancy|Lactation) Data\s+", "", s)  # label sub-headings
         if not s or s[0].islower() or DOSE.search(s) or violations(s) or len(s) < 12:  # lowercase = mid-sentence cut
             continue
         if n + len(s) > max_chars and out:
@@ -161,8 +162,14 @@ def answer_medicine(name: str, composition: str | None, ingredients: tuple[str, 
     def fill(sec: str) -> bool:
         allowed = SECTION_SOURCES.get(sec, [sec])
         picks = [p for p in cands if p.section in allowed and p.id not in used and p.sim >= MIN_SIM - 0.1]
+        # the section's own passages first ("Uses: Pain relief; Treatment of Fever"), the overview only as backup
+        picks.sort(key=lambda p: (allowed.index(p.section), p.source == "openfda"))   # monograph / SIDER before US label text
         # side effects: the medicine's own list first, then label frequencies
         per_section = 2 if sec in ("side_effects", "pregnancy", "warnings") else 1
+        # side effects: the product's own monograph list is enough; SIDER (pooled over every form of the drug, e.g.
+        # newborn IV ibuprofen) is only a fallback when there is no monograph list
+        if sec == "side_effects" and any(p.source in ("mid", "mohneesh", "k11") for p in picks):
+            picks = [p for p in picks if p.source != "sider"]
         got = []
         for p in picks:
             text = p.text

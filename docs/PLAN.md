@@ -108,18 +108,18 @@
 - Gate met (2026-10-11): 16 API tests; the full eval **through HTTP** = in-process (A1 1.0, A2 0.0101, C1 0.9847, 0 violations, 80/80; p50 31 ms) → `docs/API.md`
 
 ## Phase 13 — Design system
-- [ ] 13.1 Tokens (warm paper / charcoal, ink, pharmacy green, amber, red; light + dark)
-- [ ] 13.2 Type: Geist/Inter Tight + Geist Mono, tabular numbers
-- [ ] 13.3 Restyled shadcn primitives
-- [ ] 13.4 Rules: hairlines not shadows, spacing scale, one icon set, short motion; `/styleguide`
+- [x] 13.1 Tokens from the brand logo (navy #15384B, teal #0DA99E, mint #19C6B4, pale #E7F8F5; red / amber for safety; light + dark) → `web/src/index.css`
+- [x] 13.2 Type: Inter (interface + wordmark) + Source Serif 4 for MediBot's answers; tabular figures for money
+- [x] 13.3 Own primitives (Button, Chip, Panel, Label, Freshness) in `web/src/ui.tsx`; inline brand mark (`brand.tsx`) that follows the theme and pulses while thinking
+- [ ] 13.4 `/styleguide` page (rules applied: hairlines + one soft shadow, one icon set (lucide), short motion, reduced-motion respected)
 
 ## Phase 14 — Web app
-- [ ] 14.1 Onboarding disclaimer + logged ack, empty state
-- [ ] 14.2 Chat panel (streaming lead, cards, quick replies, voice, retry)
-- [ ] 14.3 Live Medicine Sheet (Overview / Substitutes / Prices / Interactions)
-- [ ] 14.4 ⌘K search
-- [ ] 14.5 All card components with loading/empty/error states
-- [ ] 14.6 Responsive drawer
+- [x] 14.1 Onboarding disclaimer + logged ack (`/session/ack`), empty state with suggestion cards
+- [x] 14.2 Chat: every API card rendered (℞ stamp, emergency call buttons, verified substitutes, receipt prices, cited info, interactions, stores), quick replies, voice (Web Speech), retry, 1–5 rating → `/feedback`; LLM lead shown, no streaming yet
+- [x] 14.3 Live Medicine Sheet (Overview / Substitutes / Prices / Interactions) via `/api/v1/medicine/{id}`
+- [x] 14.4 ⌘K search via `/api/v1/search`
+- [x] 14.5 Card components with loading / empty / error states
+- [x] 14.6 Responsive bottom drawer on phones (checked at 390 px); dark mode
 - [ ] 14.7 Accessibility pass
 
 ## Phase 15 — Hero features

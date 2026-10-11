@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="240" viewBox="0 0 960 240" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">MediBot logo</title><desc id="desc">Static MediBot wordmark with a chat bubble and medical cross.</desc>
+<style>
+  :root { color-scheme: light; }
+  .line { fill:none; stroke:#15384B; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
+  .teal-line { fill:none; stroke:#0DA99E; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
+  .navy { fill:#15384B; }
+  .teal { fill:#0DA99E; }
+  .pale { fill:#E7F8F5; }
+  .mint { fill:#19C6B4; }
+  .pulse { transform-box:fill-box; transform-origin:center; animation:pulse 2.5s ease-in-out infinite; }
+  .breathe { transform-box:fill-box; transform-origin:center; animation:breathe 3.2s ease-in-out infinite; }
+  .float { animation:float 3s ease-in-out infinite; }
+  .draw { stroke-dasharray:100; stroke-dashoffset:100; animation:draw 2.8s ease-in-out infinite; }
+  .blink { animation:blink 1.4s ease-in-out infinite; }
+  .spin { transform-box:fill-box; transform-origin:center; animation:spin 7s linear infinite; }
+  .wave { transform-box:fill-box; transform-origin:center; animation:wave 2.2s ease-in-out infinite; }
+  .delay1 { animation-delay:.2s; }
+  .delay2 { animation-delay:.4s; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.08);opacity:.82} }
+  @keyframes breathe { 0%,100%{opacity:.65} 50%{opacity:1} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+  @keyframes draw { 0%{stroke-dashoffset:100} 48%,78%{stroke-dashoffset:0} 100%{stroke-dashoffset:-100} }
+  @keyframes blink { 0%,70%,100%{opacity:1} 82%{opacity:.2} }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  @keyframes wave { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-5deg)} 65%{transform:rotate(5deg)} }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
+</style>
+<defs><linearGradient id="tealGrad" x1="45" y1="30" x2="180" y2="170" gradientUnits="userSpaceOnUse"><stop stop-color="#19C6B4"/><stop offset="1" stop-color="#0DA99E"/></linearGradient></defs>
+<g transform="translate(24 24)">
+ <path d="M42 10H142C164.1 10 182 27.9 182 50V118C182 140.1 164.1 158 142 158H87L53 184V158H42C19.9 158 2 140.1 2 118V50C2 27.9 19.9 10 42 10Z" stroke="#15384B" stroke-width="8" stroke-linejoin="round"/>
+ <circle cx="92" cy="84" r="42" fill="#E7F8F5"/>
+ <path d="M82 58C82 55.8 83.8 54 86 54H98C100.2 54 102 55.8 102 58V74H118C120.2 74 122 75.8 122 78V90C122 92.2 120.2 94 118 94H102V110C102 112.2 100.2 114 98 114H86C83.8 114 82 112.2 82 110V94H66C63.8 94 62 92.2 62 90V78C62 75.8 63.8 74 66 74H82V58Z" fill="url(#tealGrad)"/>
+ <circle cx="151" cy="31" r="8" fill="#19C6B4" stroke="#FFFFFF" stroke-width="4"/>
+</g>
+<text x="235" y="139" font-family="Inter, Avenir Next, Segoe UI, Arial, sans-serif" font-size="78" font-weight="700" letter-spacing="-2.2" fill="#15384B">Medi<tspan fill="#0DA99E">Bot</tspan></text>
+<path d="M239 169H437" stroke="#B7E9E3" stroke-width="5" stroke-linecap="round"/><circle cx="450" cy="169" r="3.5" fill="#0DA99E"/>
+</svg>
