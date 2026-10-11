@@ -10,6 +10,7 @@ import json
 import re
 import time
 import uuid
+from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
 
@@ -472,7 +473,24 @@ def merge_reading(now: list, reading, cat) -> list:
     phrases = [set(tokenize(p)) for p in reading.medicines]
     kept = [m for m in now if any(set(tokenize(m.text)) & p for p in phrases) or _rule_mention_is_safe_alone(m)]
     for phrase in reading.medicines:
-        for m in find_mentions(phrase, cat):
+        found = find_mentions(phrase, cat)
+        fix = reading.spelling.get(phrase)
+        if not any(m.confident for m in found) and fix:
+            # the model's spelling fix ("naxodam" -> "Naxdom") is used only if OUR catalog knows it confidently and it
+            # still looks like what was typed (no swap to another medicine); the user is asked "Did you mean …?"
+            for m in find_mentions(fix, cat):
+                if m.confident and spelling_close(phrase, fix):
+                    found = [replace(m, text=phrase, confident=False, confidence=min(m.confidence, 85.0))]
+                    break
+        for m in found:
             if all(m.ref != x.ref for x in kept):
                 kept.append(m)
     return kept
+
+
+def spelling_close(typed_text: str, fixed: str) -> bool:
+    """A spelling fix, not a different medicine: the brand words stay similar (naxodam ~ naxdom 92)."""
+    from rapidfuzz import fuzz
+    t = [w for w in tokenize(typed_text) if not NUMBER.match(w) and not FORM_WORDS.match(w)]
+    f = [w for w in tokenize(fixed) if not NUMBER.match(w) and not FORM_WORDS.match(w)]
+    return bool(t and f) and fuzz.ratio(t[0], f[0]) >= 70 and t[0][0] == f[0][0]

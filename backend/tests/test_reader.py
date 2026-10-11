@@ -106,3 +106,18 @@ def test_apply_reading_only_adds(cat, flags, named, want):
     assert d.action == "allow"
     apply_reading(d, flags)
     assert d.action == want
+
+
+def test_model_spelling_fix_is_checked_by_our_catalog(bot, monkeypatch):
+    # "naxodam" -> the model suggests "Naxdom"; our catalog confirms it and the user is asked to confirm
+    r = ask(bot, monkeypatch, "naxodam ka cheapest price bata vai",
+            dict(BASE, medicines=["naxodam"], spelling={"naxodam": "Naxdom"}, intents=["price"]))
+    assert r["detected_medication"]["brand_name"].startswith("Naxdom")
+    assert r["clarification_options"]                         # "Did you mean …?"
+    assert r["safety_guard"]["intercept_triggered"]           # naproxen: still a prescription medicine
+
+
+def test_model_cannot_swap_in_a_different_medicine(bot, monkeypatch):
+    r = ask(bot, monkeypatch, "naxodam price", dict(BASE, medicines=["naxodam"], spelling={"naxodam": "Augmentin"},
+                                                    intents=["price"]))
+    assert not r["detected_medication"] or not r["detected_medication"]["brand_name"].startswith("Augmentin")

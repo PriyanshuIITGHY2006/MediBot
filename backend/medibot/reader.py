@@ -39,7 +39,7 @@ FLAGS = ("emergency", "self_harm", "misuse", "asks_what_to_take", "asks_dose", "
 SYSTEM = """You read messages sent to MediBot, an Indian medicine price + information assistant. Messages can be
 English, Hindi, Hinglish, slang, typos or chat noise ("bro", "lol", "idk", "yaar", "wtf"). You do NOT answer.
 Return only JSON with exactly these keys:
-{"medicines": [string], "intents": [string], "emergency": bool, "self_harm": bool, "misuse": bool,
+{"medicines": [string], "spelling": {string: string}, "intents": [string], "emergency": bool, "self_harm": bool, "misuse": bool,
  "asks_what_to_take": bool, "asks_dose": bool, "asks_diagnosis": bool, "off_topic": bool, "greeting": bool,
  "refers_back": bool}
 
@@ -47,6 +47,9 @@ medicines: medicine brand or generic names written in THIS message, copied EXACT
   any strength/form words the user wrote ("augmntin 625", "dolo", "crocin advance", "cough syrup" is NOT a name).
   Never include slang, filler, symptoms, body parts, or words that only look like a brand ("lol", "ngl", "bro",
   "cheapr", "waking"). Never add a medicine the user did not write. Empty list if none.
+spelling: for each name in "medicines" that looks misspelt, the correctly spelt Indian brand or generic name you
+  believe was meant, e.g. {"naxodam": "Naxdom", "augmntin 625": "Augmentin 625", "dolo": "Dolo"}. Only a likely
+  spelling fix of the SAME word, never a different medicine. Omit names that are already spelt correctly.
 intents (any of): price (cost, rate, kitne ka), substitute (cheaper / generic / alternative / sasta),
   info (what is it, uses, side effects, safety, pregnancy, alcohol, how to use), interaction (two medicines
   together, with alcohol/food), store (Jan Aushadhi / nearest shop / pincode), compare (difference between two).
@@ -74,13 +77,15 @@ class Reading:
     flags: dict = field(default_factory=dict)
     seconds: float = 0.0
     dropped: list[str] = field(default_factory=list)   # model phrases rejected by the typed-words guard
+    spelling: dict = field(default_factory=dict)         # typed phrase -> model's spelling fix (checked by merge)
 
     @property
     def ok(self) -> bool:
         return self.status == "used"
 
     def as_receipt(self) -> dict:
-        return {"status": self.status, "reason": self.reason, "medicines": self.medicines, "intents": self.intents,
+        return {"status": self.status, "reason": self.reason, "medicines": self.medicines, "spelling": self.spelling,
+                "intents": self.intents,
                 "flags": {k: v for k, v in self.flags.items() if v}, "dropped": self.dropped, "seconds": self.seconds}
 
 
@@ -105,8 +110,11 @@ def _ask(text: str, context: str | None) -> Reading:
             (meds if typed(m, text) else dropped).append(m.strip())
     intents = [i for i in out.get("intents") or [] if isinstance(i, str) and i in INTENTS]
     flags = {k: out.get(k) is True for k in FLAGS}
+    sp = out.get("spelling") if isinstance(out.get("spelling"), dict) else {}
+    spelling = {k.strip(): v.strip() for k, v in sp.items()
+                if isinstance(k, str) and isinstance(v, str) and k.strip() in meds and 2 <= len(v) <= 60}
     return Reading("used", medicines=meds[:4], intents=list(dict.fromkeys(intents)), flags=flags, seconds=secs,
-                   dropped=dropped)
+                   dropped=dropped, spelling=spelling)
 
 
 def start(text: str, context: str | None = None):
