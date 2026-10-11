@@ -1,14 +1,16 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/source-serif-4";
+@import "@fontsource-variable/noto-sans-devanagari";
+@import "@fontsource-variable/noto-serif-devanagari";
 
 /* MediBot design tokens. Brand: navy #15384B, teal #0DA99E, mint #19C6B4, pale #E7F8F5 (from the logo).
    Inter for interface + wordmark, Source Serif 4 for what MediBot says (calm, readable long-form answers). */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, Cambria, serif;
+  --font-sans: "Inter Variable", "Noto Sans Devanagari Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Noto Serif Devanagari Variable", ui-serif, Georgia, Cambria, serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
 
   --color-paper: #f7f9f8;        /* app background: off-white with a breath of mint */
@@ -83,6 +85,23 @@
 .leader { flex: 1; border-bottom: 1px dotted var(--color-line-2); margin: 0 .6rem; transform: translateY(-4px); min-width: 1rem; }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* start pages: children rise one after another */
+  .stagger > * { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+  .stagger > *:nth-child(2) { animation-delay: .07s } .stagger > *:nth-child(3) { animation-delay: .14s }
+  .stagger > *:nth-child(4) { animation-delay: .21s } .stagger > *:nth-child(5) { animation-delay: .28s }
+  .stagger > *:nth-child(6) { animation-delay: .35s } .stagger > *:nth-child(7) { animation-delay: .42s }
+  .stagger > *:nth-child(n+8) { animation-delay: .49s }
+  .float { animation: float 5s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-5px) } }
+  .aurora-blob { animation: drift 22s ease-in-out infinite alternate; }
+  .aurora-blob.b2 { animation-duration: 28s; animation-direction: alternate-reverse; }
+  @keyframes drift { 0% { transform: translate(0,0) scale(1) } 50% { transform: translate(6%,4%) scale(1.08) } 100% { transform: translate(-5%,6%) scale(.95) } }
+  .lift { transition: transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .2s, border-color .2s; }
+  .lift:hover { transform: translateY(-2px); }
+  .cta-shine { position: relative; overflow: hidden; }
+  .cta-shine::after { content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+    background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / .18) 50%, transparent 70%); animation: shine 3.2s ease-in-out 1s infinite; }
+  @keyframes shine { 0% { transform: translateX(-120%) } 45%,100% { transform: translateX(120%) } }
   .rise { animation: rise .28s cubic-bezier(.2,.7,.2,1) both; }
   @keyframes rise { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
   .mb-pulse { transform-box: fill-box; transform-origin: center; animation: mbpulse 1.6s ease-in-out infinite; }
@@ -90,3 +109,20 @@
   .mb-dot { animation: mbdot 1.6s ease-in-out infinite; }
   @keyframes mbdot { 0%,100% { opacity: .35 } 50% { opacity: 1 } }
 }
+
+/* Pharmacist Card: print only the card, on white, full width */
+@media print {
+  body * { visibility: hidden !important; }
+  .pharm-card, .pharm-card * { visibility: visible !important; }
+  .pharm-overlay { position: absolute !important; inset: 0 !important; background: none !important; backdrop-filter: none !important; padding: 0 !important; overflow: visible !important; }
+  .pharm-card { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border-color: #cdd9d9 !important; }
+  .no-print { display: none !important; }
+  @page { margin: 12mm; }
+}
+
+/* soft brand-coloured light behind the start pages (static when motion is reduced) */
+.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aurora-blob { position: absolute; width: 46vmax; height: 46vmax; border-radius: 50%; filter: blur(70px); opacity: .5; }
+.aurora-blob.b1 { top: -18vmax; right: -12vmax; background: radial-gradient(circle, color-mix(in oklab, var(--color-mint) 38%, transparent), transparent 65%); }
+.aurora-blob.b2 { bottom: -22vmax; left: -14vmax; background: radial-gradient(circle, color-mix(in oklab, var(--color-teal) 26%, transparent), transparent 65%); }
+.dark .aurora-blob { opacity: .32; }

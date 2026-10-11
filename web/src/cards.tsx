@@ -3,6 +3,7 @@
 import { AlertTriangle, BadgeCheck, ExternalLink, MapPin, PhoneCall, ShieldAlert, Store } from 'lucide-react'
 import type { Card, Citation, Quote, SubstituteRow } from './api'
 import { Chip, Freshness, Label, PLATFORM, Panel, UNIT, cx, inr } from './ui'
+import { t } from './i18n'
 
 type Ctx = { citations: Citation[]; onAsk: (q: string) => void; onOpen: (productId: string) => void }
 
@@ -25,7 +26,7 @@ export function EmergencyCard({ c }: { c: Extract<Card, { type: 'emergency' }> }
       <div className="flex items-center gap-2 font-semibold text-red"><ShieldAlert className="size-5" />{lines[0]}</div>
       <ul className="mt-2 space-y-1 text-[15px]">{lines.slice(1).map((l, i) => <li key={i}>{l.replace(/^•\s*/, '')}</li>)}</ul>
       <div className="mt-3 flex flex-wrap gap-2">
-        {(c.self_harm ? [['14416', 'Tele-MANAS 14416'], ['112', 'Emergency 112']] : [['112', 'Call 112'], ['108', 'Ambulance 108']]).map(([n, label]) => (
+        {(c.self_harm ? [['14416', 'Tele-MANAS 14416'], ['112', t('Emergency 112')]] : [['112', t('Call 112')], ['108', t('Ambulance 108')]]).map(([n, label]) => (
           <a key={n} href={`tel:${n}`} className="inline-flex items-center gap-2 rounded-lg bg-red px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
             <PhoneCall className="size-4" />{label}
           </a>
@@ -55,7 +56,7 @@ export function MedicineCard({ c, ctx }: { c: Extract<Card, { type: 'medicine' }
         {c.name}
       </button>
       {c.category && <Chip tone={SCHEDULE_TONE(c.category)}>{SCHEDULE_TEXT[c.category] ?? c.category}</Chip>}
-      <div className="w-full text-sm text-ink-2">{c.generic ? 'Generic medicine name' : c.composition ? <>Contains <span className="text-ink">{c.composition}</span></> : 'Composition not verified'}</div>
+      <div className="w-full text-sm text-ink-2">{c.generic ? t('Generic medicine name') : c.composition ? <>{t('Contains')} <span className="text-ink">{c.composition}</span></> : t('Composition not verified')}</div>
       {c.info_from && <div className="w-full text-xs text-amber">Information below is for {c.info_from}, the {c.brand} product with a verified composition.</div>}
     </div>
   )
@@ -91,7 +92,7 @@ export function InfoCard({ c, ctx }: { c: Extract<Card, { type: 'info' }>; ctx: 
 export function Sources({ c }: { c: Extract<Card, { type: 'sources' }> }) {
   return (
     <details className="group text-xs text-ink-3">
-      <summary className="cursor-pointer select-none list-none hover:text-ink-2">Sources ({c.citations.length}) <span className="group-open:hidden">▸</span><span className="hidden group-open:inline">▾</span></summary>
+      <summary className="cursor-pointer select-none list-none hover:text-ink-2">{t('Sources')} ({c.citations.length}) <span className="group-open:hidden">▸</span><span className="hidden group-open:inline">▾</span></summary>
       <ol className="mt-1.5 space-y-1">
         {c.citations.map(s => (
           <li key={s.n} className="flex gap-2"><span className="num">{s.n}</span>
@@ -104,7 +105,7 @@ export function Sources({ c }: { c: Extract<Card, { type: 'sources' }> }) {
 
 // ---------------------------------------------------------------- money
 export function Receipt({ quotes, unit }: { quotes: Quote[]; unit?: string | null }) {
-  if (!quotes.length) return <p className="text-sm text-ink-3">No recent price on record for this pack.</p>
+  if (!quotes.length) return <p className="text-sm text-ink-3">{t('No recent price on record for this pack.')}</p>
   const best = Math.min(...quotes.map(q => q.price_per_unit_inr ?? Infinity))
   return (
     <ul className="space-y-1.5">
@@ -112,17 +113,17 @@ export function Receipt({ quotes, unit }: { quotes: Quote[]; unit?: string | nul
         <li key={q.platform + i} className="text-sm">
           <div className="flex items-baseline">
             <span className="text-ink">{PLATFORM[q.platform] ?? q.platform}</span>
-            {q.price_per_unit_inr === best && quotes.length > 1 && <span className="ml-2"><Chip tone="green">lowest</Chip></span>}
+            {q.price_per_unit_inr === best && quotes.length > 1 && <span className="ml-2"><Chip tone="green">{t('lowest')}</Chip></span>}
             <span className="leader" />
             <span className="num font-medium">{inr(q.price_inr)}</span>
           </div>
           <div className="flex flex-wrap items-center gap-x-2 text-[11px] text-ink-3">
-            <span>{q.pack_label ?? 'pack'}</span>
-            {q.price_per_unit_inr != null && <span className="num">{inr(q.price_per_unit_inr)}/{UNIT[q.pack_unit ?? unit ?? 'unit'] ?? 'unit'}</span>}
+            <span>{q.pack_label ?? t('pack')}</span>
+            {q.price_per_unit_inr != null && <span className="num">{inr(q.price_per_unit_inr)}/{t(UNIT[q.pack_unit ?? unit ?? 'unit'] ?? 'unit')}</span>}
             {q.mrp_inr != null && q.mrp_inr > q.price_inr && <span className="num line-through">{inr(q.mrp_inr)}</span>}
             <Freshness q={q} />
-            {q.in_stock === false && <span className="text-red">out of stock</span>}
-            {q.url && <a href={q.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 hover:text-ink">open <ExternalLink className="size-3" /></a>}
+            {q.in_stock === false && <span className="text-red">{t('out of stock')}</span>}
+            {q.url && <a href={q.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 hover:text-ink">{t('open')} <ExternalLink className="size-3" /></a>}
           </div>
           {q.above_nppa_ceiling && <p className="mt-0.5 text-[11px] text-red">Above the government ceiling price of {inr(q.above_nppa_ceiling.ceiling_per_unit_inr)}/unit ({q.above_nppa_ceiling.source})</p>}
         </li>
@@ -132,10 +133,10 @@ export function Receipt({ quotes, unit }: { quotes: Quote[]; unit?: string | nul
 }
 
 export function SubstituteList({ rows, current, unit, note, onOpen }: { rows: SubstituteRow[]; current?: number | null; unit?: string | null; note?: string | null; onOpen: (id: string) => void }) {
-  const u = UNIT[unit ?? 'unit'] ?? 'unit'
+  const u = t(UNIT[unit ?? 'unit'] ?? 'unit')
   return (
     <div className="space-y-2">
-      {current != null && <p className="text-xs text-ink-3">Current price <span className="num text-ink-2">{inr(current)}/{u}</span> · compared per {u}</p>}
+      {current != null && <p className="text-xs text-ink-3">{t('Current price')} <span className="num text-ink-2">{inr(current)}/{u}</span> · {t('compared per {u}', { u })}</p>}
       <ul className="divide-y divide-line rounded-[var(--radius-card)] border border-line bg-sheet">
         {rows.map(r => (
           <li key={r.product_id} className="flex items-center gap-3 px-3 py-2.5">
@@ -153,8 +154,8 @@ export function SubstituteList({ rows, current, unit, note, onOpen }: { rows: Su
           </li>
         ))}
       </ul>
-      {note && <p className="text-xs text-ink-3">Note: {note}.</p>}
-      {rows[0] && <p className="text-xs text-ink-2">{rows[0].user_advisory}</p>}
+      {note && <p className="text-xs text-ink-3">{t('Note:')} {note}.</p>}
+      {rows[0] && <p className="text-xs text-ink-2">{t(rows[0].user_advisory)}</p>}
     </div>
   )
 }
@@ -165,14 +166,14 @@ function Interactions({ c }: { c: Extract<Card, { type: 'interactions' }> }) {
   const tone = (s: string) => s === 'Major' || s === 'duplicate' ? 'red' : s === 'Moderate' ? 'amber' : 'plain'
   return (
     <div className="space-y-2">
-      <Label>Interaction check</Label>
+      <Label>{t('Interaction check')}</Label>
       {c.findings.map((f, i) => (
         <div key={i} className="flex items-start gap-2.5 text-sm">
-          <span className="shrink-0 pt-0.5"><Chip tone={tone(f.severity) as 'red' | 'amber' | 'plain'}>{f.severity === 'duplicate' ? 'Same ingredient' : f.severity}</Chip></span>
+          <span className="shrink-0 pt-0.5"><Chip tone={tone(f.severity) as 'red' | 'amber' | 'plain'}>{f.severity === 'duplicate' ? t('Same ingredient') : t(f.severity)}</Chip></span>
           <p className="leading-snug">{f.text}</p>
         </div>
       ))}
-      <p className="text-xs text-ink-2">Please ask your doctor or pharmacist before taking these together.</p>
+      <p className="text-xs text-ink-2">{t('Please ask your doctor or pharmacist before taking these together.')}</p>
     </div>
   )
 }
@@ -181,13 +182,13 @@ function Stores({ c }: { c: Extract<Card, { type: 'stores' }> }) {
   if (!c.stores.length) return <p className="text-[15px]">{c.text}</p>
   return (
     <div className="space-y-2">
-      <Label>Jan Aushadhi Kendras near {c.pincode}</Label>
+      <Label>{t('Jan Aushadhi Kendras near {pin}', { pin: c.pincode ?? '' })}</Label>
       <ul className="space-y-2">{c.stores.map(s => (
         <li key={s.store_code} className="flex gap-2.5 text-sm">
           <Store className="mt-0.5 size-4 shrink-0 text-green" />
           <div><div>{s.address}</div><div className="text-[11px] text-ink-3">{s.district}, {s.state} · {s.pincode}</div>
             <a className="inline-flex items-center gap-1 text-[11px] text-green hover:underline" target="_blank" rel="noreferrer"
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Jan Aushadhi Kendra ${s.address} ${s.pincode}`)}`}><MapPin className="size-3" />Directions</a></div>
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Jan Aushadhi Kendra ${s.address} ${s.pincode}`)}`}><MapPin className="size-3" />{t("Directions")}</a></div>
         </li>))}</ul>
     </div>
   )
@@ -213,13 +214,13 @@ export function CardView({ card, ctx }: { card: Card; ctx: Ctx }) {
     case 'sources': return <Sources c={card} />
     case 'substitutes': return card.rows.length
       ? <SubstituteList rows={card.rows} note={card.note} unit={card.rows[0]?.pack_unit} onOpen={ctx.onOpen} />
-      : <p className="text-sm text-ink-2">{card.note ? `Note: ${card.note}.` : card.text}</p>
-    case 'prices': return <div className="space-y-1.5"><Label>Prices</Label><Receipt quotes={card.quotes} /></div>
+      : <p className="text-sm text-ink-2">{card.note ? `${t('Note:')} ${card.note}.` : card.text}</p>
+    case 'prices': return <div className="space-y-1.5"><Label>{t('Prices')}</Label><Receipt quotes={card.quotes} /></div>
     case 'interactions': return <Interactions c={card} />
     case 'stores': return <Stores c={card} />
     case 'compare': return <Compare c={card} />
     case 'clarify': return (
-      <div className="flex flex-wrap items-center gap-1.5 text-sm"><span className="text-ink-2">Did you mean</span>
+      <div className="flex flex-wrap items-center gap-1.5 text-sm"><span className="text-ink-2">{t('Did you mean')}</span>
         {card.options.map(o => <Chip key={o} onClick={() => ctx.onAsk(o)}>{o}</Chip>)}</div>)
     case 'lead': return <p className="say">{card.text}</p>
     case 'fallback': return <p className="say text-ink-2">{card.text}</p>

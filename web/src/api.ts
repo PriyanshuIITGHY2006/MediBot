@@ -74,11 +74,60 @@ export type SearchHit = { product_id: string; name: string; composition: string 
 export const api = {
   start: () => call<{ session_id: string; disclaimer: string; requires_acknowledgement: boolean }>('/api/v1/session/start', { method: 'POST' }),
   ack: (session_id: string) => call<{ disclaimer_acknowledged: boolean }>('/api/v1/session/ack', { method: 'POST', body: JSON.stringify({ session_id }) }),
-  query: (session_id: string, user_query: string) =>
-    call<QueryResponse>('/api/v1/medibot/query', { method: 'POST', body: JSON.stringify({ session_id, user_query, disclaimer_acknowledged: true }) }),
+  query: (session_id: string, user_query: string, language: 'en' | 'hi' = 'en') =>
+    call<QueryResponse>('/api/v1/medibot/query', { method: 'POST', body: JSON.stringify({ session_id, user_query, disclaimer_acknowledged: true, language }) }),
   feedback: (session_id: string, turn_id: string, rating: number) =>
     call<{ stored: boolean }>('/api/v1/feedback', { method: 'POST', body: JSON.stringify({ session_id, turn_id, rating }) }),
   search: (q: string) => call<{ results: SearchHit[] }>(`/api/v1/search?q=${encodeURIComponent(q)}&limit=8`),
   medicine: (id: string) => call<Sheet>(`/api/v1/medicine/${encodeURIComponent(id)}`),
   forget: (session_id: string) => call<{ forgotten: boolean }>(`/api/v1/session/${session_id}`, { method: 'DELETE' }),
 }
+
+// ---------------------------------------------------------------- bill split (Phase 15.1)
+export type BillLine = { name: string; quantity: number; product_id?: string | null }
+export type CartLine = {
+  item_key: string; label: string; product_id: string; name: string; is_asked_product: boolean; packs: number
+  pack_price_inr: number; pack_label: string | null; pack_quantity: number; cost_inr: number; overbuy_units: number
+  url: string | null; source: string; observed: string | null
+}
+export type BillCart = {
+  platform: string; subtotal_inr: number; delivery_fee_inr: number; total_inr: number; delivery_fee_known: boolean
+  min_order_inr: number | null; free_delivery_above_inr: number | null; lines: CartLine[]
+}
+export type BillPlan = { total_inr: number; pharmacies: string[]; swaps: number; unplaced: string[]; carts: BillCart[] }
+export type BillItemRow = {
+  key: string; input: string; quantity: number; status: 'ok' | 'no_price' | 'banned' | 'not_recognised'
+  product_id?: string; name?: string; composition?: string | null; form?: string; requires_prescription?: boolean
+  confident?: boolean; mandated_prompt?: string | null; note?: string; pharmacies?: string[]; has_alternatives?: boolean
+}
+export type BillResult = {
+  items: BillItemRow[]; best: BillPlan | null; as_asked: BillPlan | null; one_stop: BillPlan | null
+  single_pharmacy: { platform: string; total_inr: number }[]
+  jan_aushadhi: null | { total_inr: number; complete: boolean; note: string; lines: { item_key: string; label: string; name: string; packs: number; pack_label: string | null; pack_price_inr: number; cost_inr: number }[] }
+  savings_inr: number | null; unknown_delivery_terms: string[]; advisory: string; disclaimer: string
+}
+export const billApi = {
+  parse: (text: string) => call<{ lines: (BillLine & { quantity_given: boolean })[] }>('/api/v1/bill/parse', { method: 'POST', body: JSON.stringify({ text }) }),
+  plan: (items: BillLine[], allow_alternatives: boolean, max_pharmacies: number | null) =>
+    call<BillResult>('/api/v1/bill/plan', { method: 'POST', body: JSON.stringify({ items, allow_alternatives, max_pharmacies }) }),
+}
+export type ReadLine = { name: string; written: string; quantity: number; quantity_given: boolean; product_id: string | null; composition: string | null; requires_prescription: boolean | null; confident: boolean }
+export const readBill = (file: Blob, vision: boolean) =>
+  call<{ lines: ReadLine[]; engine: 'tesseract' | 'vision'; note: string | null; stored: false }>(
+    `/api/v1/bill/read${vision ? '?vision=1' : ''}`, { method: 'POST', body: file, headers: { 'Content-Type': file.type || 'application/octet-stream' } })
+
+// ---------------------------------------------------------------- my cabinet (Phase 15.3)
+export type CabinetRow = {
+  product_id: string; status: 'ok' | 'no_price' | 'banned' | 'not_found'; name?: string; composition?: string | null
+  per_day?: number; units_per_month?: number; requires_prescription?: boolean; mandated_prompt?: string | null; note?: string
+  pack_unit?: string | null; price_per_unit_inr?: number | null; cheapest_platform?: string | null; observed?: string | null
+  monthly_inr?: number | null
+  best_alternative?: null | { product_id: string; brand_name: string; manufacturer?: string | null; tier: string; price_per_unit_inr: number; monthly_inr: number; savings_percentage?: number | null }
+}
+export type CabinetResult = {
+  items: CabinetRow[]; monthly_inr: number; monthly_best_inr: number; monthly_savings_inr: number; complete: boolean
+  interactions: { kind: string; medicine_a: string; medicine_b: string; severity: string; text: string; citations: { title: string; url: string }[] }[]
+  interaction_advice: string; advisory: string; disclaimer: string
+}
+export const cabinetCheck = (items: { product_id: string; per_day: number }[]) =>
+  call<CabinetResult>('/api/v1/cabinet/check', { method: 'POST', body: JSON.stringify({ items }) })

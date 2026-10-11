@@ -1,5 +1,6 @@
 // Restyled primitives (Phase 13): hairlines not shadows, one icon set (lucide), tabular numbers for money.
 import type { ReactNode } from 'react'
+import { t } from './i18n'
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ')
 
@@ -53,6 +54,6 @@ export function Label({ children }: { children: ReactNode }) {
 
 export function Freshness({ q }: { q: { source?: string; observed?: string | null; freshness?: string } }) {
   const live = q.source === 'live' || q.source === 'cached'
-  const text = q.freshness ?? (q.source === 'live' ? 'live now' : q.source === 'cached' ? 'checked recently' : `as of ${q.observed ?? 'earlier'}`)
+  const text = q.freshness ?? (q.source === 'live' ? t('live now') : q.source === 'cached' ? t('checked recently') : `as of ${q.observed ?? 'earlier'}`)
   return <span className={cx('num text-[11px]', live ? 'text-green' : 'text-amber')}>{live ? '● ' : '○ '}{text}</span>
 }
