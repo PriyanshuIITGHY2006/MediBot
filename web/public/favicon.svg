@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title desc">
 <title id="title">MediBot favicon</title><desc id="desc">Compact MediBot chat and medical cross icon for browser tabs.</desc>
 <style>
-  :root { color-scheme: light; }
+  :root { color-scheme: light dark; }
+  @media (prefers-color-scheme: dark) { .outline { stroke:#EAF4F4; } .bg { fill:#12302D; } }
   .line { fill:none; stroke:#15384B; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
   .teal-line { fill:none; stroke:#0DA99E; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
   .navy { fill:#15384B; }
@@ -26,9 +27,8 @@
   @keyframes wave { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-5deg)} 65%{transform:rotate(5deg)} }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
 </style>
-<rect x="7" y="7" width="114" height="114" rx="31" fill="#F5FBFA"/>
-<path d="M36 22H91C104.3 22 115 32.7 115 46V75C115 88.3 104.3 99 91 99H63L43 114V99H36C22.7 99 12 88.3 12 75V46C12 32.7 22.7 22 36 22Z" stroke="#15384B" stroke-width="6.5" stroke-linejoin="round"/>
-<circle cx="64" cy="62" r="25" fill="#E7F8F5"/>
+<path d="M36 22H91C104.3 22 115 32.7 115 46V75C115 88.3 104.3 99 91 99H63L43 114V99H36C22.7 99 12 88.3 12 75V46C12 32.7 22.7 22 36 22Z" class="outline" stroke="#15384B" stroke-width="7" stroke-linejoin="round"/>
+<circle cx="64" cy="62" r="25" class="bg" fill="#E7F8F5"/>
 <path d="M59 44H69V57H82V67H69V80H59V67H46V57H59Z" fill="#0DA99E" class="pulse"/>
 <circle cx="101" cy="25" r="6" fill="#19C6B4" class="pulse"/>
 </svg>
