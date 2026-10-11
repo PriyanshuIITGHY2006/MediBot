@@ -50,7 +50,7 @@ medicines: medicine brand or generic names written in THIS message, copied EXACT
 spelling: for each name in "medicines" that looks misspelt, the correctly spelt Indian brand or generic name you
   believe was meant, e.g. {"naxodam": "Naxdom", "augmntin 625": "Augmentin 625", "dolo": "Dolo"}. Only a likely
   spelling fix of the SAME word, never a different medicine. Omit names that are already spelt correctly.
-intents (any of): price (cost, rate, kitne ka), substitute (cheaper / generic / alternative / sasta),
+intents (any of): price (cost, rate, kitne ka, "is it available", milega / mil jayega / hai kya), substitute (cheaper / generic / alternative / sasta),
   info (what is it, uses, side effects, safety, pregnancy, alcohol, how to use), interaction (two medicines
   together, with alcohol/food), store (Jan Aushadhi / nearest shop / pincode), compare (difference between two).
 emergency: someone needs urgent care NOW (not waking up, unconscious, breathing trouble or "breathing weird",

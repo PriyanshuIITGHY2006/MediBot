@@ -20,7 +20,7 @@ from medibot import cards as C
 from medibot import context as ctx
 from medibot.catalog import load_catalog
 from medibot import reader
-from medibot.mentions import FORM_WORDS, NUMBER, _common, find_mentions, tokenize
+from medibot.mentions import FORM_WORDS, NUMBER, Mention, _common, find_mentions, tokenize
 from medibot.safety import messages as msg
 from medibot.llm import get_llm
 from medibot.narrator import narrate
@@ -30,7 +30,7 @@ from medibot.safety.output_check import check_cards, violations
 from medibot.prices.engine import PriceEngine, freshness
 from medibot.substitutes import find_substitutes, refresh_with_live
 from medibot.substitutes import render as render_substitutes
-from medibot.understanding import understand
+from medibot.understanding import rules as _rules, understand
 from medibot.health import interactions as ix
 from medibot.health.answer import HealthAnswer, answer_medicine, answer_topic, answer_topic_id, render_sources
 from medibot.health.evidence import query as db_query
@@ -67,14 +67,20 @@ def price_book() -> dict[str, list[dict]]:
 def kendras() -> pd.DataFrame:
     raw = json.loads((ROOT / "data/raw/jan_aushadhi/kendras.json").read_text())["responseBody"]["addKendraResponseList"]
     df = pd.DataFrame(raw)[["storeCode", "pinCode", "districtName", "stateName", "kendraAddress", "status"]]
-    return df[df["status"].eq(1)].assign(pin=lambda d: d["pinCode"].astype(str))  # owner name / phone never loaded
+    pin = pd.to_numeric(df["pinCode"], errors="coerce").fillna(0).astype(int).astype(str)
+    return df.assign(pin=pin)[df["status"].eq(1)]  # owner name / phone never loaded
 
 
 def nearest_kendras(pincode: str, n: int = 3) -> list[dict]:
     k = kendras()
     exact = k[k["pin"] == pincode]
     near = k[k["pin"].str[:3] == pincode[:3]] if len(exact) < n else exact.iloc[0:0]
-    out = pd.concat([exact, near]).drop_duplicates("storeCode").head(n)
+    out = pd.concat([exact, near]).drop_duplicates("storeCode")
+    if len(out) < n:  # nothing in the 3-digit area: numerically closest pincodes in the same 2-digit region
+        region = k[k["pin"].str[:2] == pincode[:2]]
+        region = region.assign(d=(region["pin"].astype(int) - int(pincode)).abs()).sort_values("d")
+        out = pd.concat([out, region.drop(columns="d")]).drop_duplicates("storeCode")
+    out = out.head(n)
     return [{"store_code": r.storeCode, "address": r.kendraAddress, "pincode": r.pin, "district": r.districtName,
              "state": r.stateName} for r in out.itertuples()]
 
@@ -107,7 +113,7 @@ class Assistant:
         req = understand(text, have_mentions=bool(now), have_context=bool(s.focus), allow_llm=r_fut is None)
         reading = reader.collect(r_fut, r_early, t_r)
         if reading.ok:
-            now = merge_reading(now, reading, cat)
+            now = merge_reading(now, reading, cat, text)
             if reading.intents:
                 req.intents = reading.intents
             elif reading.flags.get("off_topic") or reading.flags.get("greeting"):
@@ -123,6 +129,10 @@ class Assistant:
         if s.last_intents and req.intents == ["info"] and (not now or follow_up):
             req.intents = s.last_intents  # "and dolo 650?" / "price?" keeps the previous question type
         used, notes = ctx.resolve(req, now, s, cat)
+        # a store / pincode turn is about places, not the previous medicine: don't drag its card and stamp along
+        bare_pin = bool(re.fullmatch(r"\s*(my )?(pin ?code( is)?)?\s*[1-9]\d{5}\s*", text.lower()))
+        if not now and ("store" in rules_intents(text) or bare_pin):
+            used, notes = [], notes + ["store question: previous medicine not carried over"]
         dec = decide(text, cat, mentions=used)
         dec.receipt = notes + dec.receipt
         if reading.ok:
@@ -468,13 +478,15 @@ def _rule_mention_is_safe_alone(m) -> bool:
     return all(w in name for w in words)          # typed exactly, not a fuzzy look-alike
 
 
-def merge_reading(now: list, reading, cat) -> list:
+def merge_reading(now: list, reading, cat, message: str = "") -> list:
     """Rule mentions + the model's medicine phrases (resolved by OUR resolver, never trusted as-is)."""
     phrases = [set(tokenize(p)) for p in reading.medicines]
     kept = [m for m in now if any(set(tokenize(m.text)) & p for p in phrases) or _rule_mention_is_safe_alone(m)]
     for phrase in reading.medicines:
-        found = find_mentions(phrase, cat)
+        found = find_mentions(phrase, cat) or model_named(phrase, cat, message)
         fix = reading.spelling.get(phrase)
+        if not found and fix and spelling_close(phrase, fix):
+            found = [replace(m, text=phrase, confident=False) for m in model_named(fix, cat, message)]
         if not any(m.confident for m in found) and fix:
             # the model's spelling fix ("naxodam" -> "Naxdom") is used only if OUR catalog knows it confidently and it
             # still looks like what was typed (no swap to another medicine); the user is asked "Did you mean …?"
@@ -488,9 +500,34 @@ def merge_reading(now: list, reading, cat) -> list:
     return kept
 
 
+def model_named(phrase: str, cat, message: str = "") -> list:
+    """The model says this phrase IS a medicine ("i pill"), so look it up directly: the free-text guards (no span may
+    start on "i" or "pill") exist for raw text, not for a name the model identified. Still strict: a real catalog
+    product whose name contains every typed word; several such products -> unsure, and the user is asked."""
+    want = set(tokenize(phrase))
+    if not want:
+        return []
+    hits = [h for h in cat.index.resolve(phrase, 8)
+            if h.kind == "product" and h.product_id in cat.products and want <= set(tokenize(h.name))]
+    if not hits:
+        return []
+    comps = {cat.products[h.product_id].composition_id for h in hits}
+    # among matching products, the one sharing most words with the whole message ("i pill EMERGENCY ka price")
+    said = set(tokenize(message))
+    hits.sort(key=lambda h: -len(said & set(tokenize(h.name))))
+    top = hits[0]
+    return [Mention("product", top.product_id, top.name, (0, 0), phrase, min(top.confidence, 90.0),
+                    confident=len(comps) == 1, brand_only=False,   # already a named product: no brand-stem grouping
+                    alternatives=tuple(h.product_id for h in hits[1:3]))]
+
+
 def spelling_close(typed_text: str, fixed: str) -> bool:
     """A spelling fix, not a different medicine: the brand words stay similar (naxodam ~ naxdom 92)."""
     from rapidfuzz import fuzz
     t = [w for w in tokenize(typed_text) if not NUMBER.match(w) and not FORM_WORDS.match(w)]
     f = [w for w in tokenize(fixed) if not NUMBER.match(w) and not FORM_WORDS.match(w)]
     return bool(t and f) and fuzz.ratio(t[0], f[0]) >= 70 and t[0][0] == f[0][0]
+
+
+def rules_intents(text: str) -> list[str]:
+    return _rules(text).intents

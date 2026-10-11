@@ -14,7 +14,7 @@ INTENT_RULES = [
     ("substitute", r"cheaper|\bcheap\b|sasta|sasti|saste|alternative|substitute|generic|same as|similar|option|replacement|jan aushadhi"),
     ("price", r"price|cost|rate|kitne|kitna|how much (is|does|for)|mrp|buy|where can i|available|milega|milegi|kaha|kahan"),
     ("interaction", r"together|interact|with alcohol|alcohol ke saath|mix(ed)? with|along with|saath mein|combine"),
-    ("store", r"jan aushadhi (store|kendra|shop)|kendra|nearest (store|shop|pharmacy|chemist)|near me|pincode|pin code"),
+    ("store", r"jan aushadhi (store|kendra|shop)|kendra|nearest (jan aushadhi|store|shop|pharmacy|chemist|medical)|near me|nearby|pincode|pin code"),
     ("compare", r"compare|difference between|vs\.?\b|versus|better than|which is better"),
     ("info", r"used for|use of|what is|side effect|how (does|do) .* work|kis kaam|safe|pregnan|breastfeed|drive|habit|"
              r"tell me about|information|details|composition|ingredient|contains|generic name"),
