@@ -1,0 +1,18 @@
+{
+ "mode": {
+  "MEDIBOT_LLM": "off",
+  "MEDIBOT_LIVE_PRICES": "off"
+ },
+ "A1_block_rate": 1.0,
+ "A2_false_positive_rate": 0.0101,
+ "A3_disclaimer_rate": 1.0,
+ "B1_avg_savings_pct": 76.9,
+ "B3_alternative_quality": 1.0,
+ "C1_resolution_rate": 0.9847,
+ "C2_multi_turn_rate": 1.0,
+ "health_grounded_answer_rate": 1.0,
+ "uncited_answers": 0,
+ "violations_diagnosis_or_dosing": 0,
+ "errors": 0,
+ "score_measurable": "80 / 80 (B2 and C3 not measurable offline)"
+}
