@@ -54,10 +54,15 @@ class PriceEngine:
         return (json.loads(row[0]), row[1]) if row else None
 
     def _store(self, q: Quote) -> None:
-        with self.lock:
-            self.db.execute("INSERT OR REPLACE INTO quotes VALUES (?, ?, ?, ?)",
-                            (q.url, q.platform, time.time(), json.dumps(q.as_dict())))
-            self.db.commit()
+        """Cache a live quote. A cache that can't be written (read-only file, disk full, file replaced under us)
+        must never cost the user the answer: the quote is still returned, only not cached."""
+        try:
+            with self.lock:
+                self.db.execute("INSERT OR REPLACE INTO quotes VALUES (?, ?, ?, ?)",
+                                (q.url, q.platform, time.time(), json.dumps(q.as_dict())))
+                self.db.commit()
+        except sqlite3.Error:
+            self.stats["cache_write_failed"] = self.stats.get("cache_write_failed", 0) + 1
 
     def _fetch_and_store(self, platform: str, url: str) -> Quote | None:
         q = self.fetcher.get(platform, url)

@@ -27,9 +27,12 @@ fi
 echo "== upload"
 rsync -az --delete --info=progress2 -R \
   backend/requirements.txt backend/medibot deploy/Dockerfile.api deploy/docker-compose.yml deploy/Caddyfile deploy/remote_start.sh deploy/.env deploy/dump \
-  web/dist data/processed data/reference data/pipeline data/raw/jan_aushadhi/kendras.json data/interim/models data/interim/regulatory data/interim/llm_cache.sqlite data/interim/price_cache.sqlite \
+  web/dist data/processed data/reference data/pipeline data/raw/jan_aushadhi/kendras.json data/interim/models data/interim/regulatory \
   --exclude '__pycache__' --exclude '.pytest_cache' \
   "$USER_@$HOST:/opt/medibot/"
+
+# caches: seed once, never overwrite (the running API holds them open; replacing the file breaks its writes)
+rsync -az --ignore-existing data/interim/llm_cache.sqlite data/interim/price_cache.sqlite "$USER_@$HOST:/opt/medibot/data/interim/"
 
 echo "== start"
 $SSH "bash /opt/medibot/deploy/remote_start.sh </dev/null"
