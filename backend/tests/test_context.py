@@ -149,3 +149,14 @@ def test_pincode_still_answers_the_open_question(bot):
     _, ask, answer = converse(bot, ["dolo 650 price", "Nearest Jan Aushadhi", "110001"])
     stores = [c for c in answer["cards"] if c["type"] == "stores"]
     assert stores and stores[0]["pincode"] == "110001" and stores[0]["stores"]
+
+
+def test_side_effects_quick_reply_after_a_price_turn_is_answered(bot):
+    """Tapping "Side effects" after "Dolo 650 price" returned the prices again (short follow-up inherited 'price')."""
+    _, se = converse(bot, ["Dolo 650 price", "Side effects"])
+    assert "info" in _types(se) and "prices" not in _types(se)
+
+
+def test_bare_follow_up_still_keeps_the_question_type(bot):
+    _, nxt = converse(bot, ["Dolo 650 price", "and Pan 40?"])
+    assert "prices" in _types(nxt)

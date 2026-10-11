@@ -30,7 +30,7 @@ from medibot.safety.output_check import check_cards, violations
 from medibot.prices.engine import PriceEngine, freshness
 from medibot.substitutes import find_substitutes, refresh_with_live
 from medibot.substitutes import render as render_substitutes
-from medibot.understanding import rules as _rules, understand
+from medibot.understanding import INTENT_RULES, rules as _rules, understand
 from medibot.health import interactions as ix
 from medibot.health.answer import HealthAnswer, answer_medicine, answer_topic, answer_topic_id, render_sources
 from medibot.health.evidence import query as db_query
@@ -126,8 +126,11 @@ class Assistant:
                     now.append(m)
         follow_up = bool(re.match(r"^\s*(and|aur|or|what about|how about|and what about|also)\b", text.lower())) \
             or len(text.split()) <= 3
-        if s.last_intents and req.intents == ["info"] and (not now or follow_up):
-            req.intents = s.last_intents  # "and dolo 650?" / "price?" keeps the previous question type
+        # "and dolo 650?" keeps the previous question type - but only when the message names no question type of its
+        # own: "Side effects" after a price turn is an info question, not another price question
+        says_what = any(re.search(rx, text.lower()) for name, rx in INTENT_RULES if name != "greeting")
+        if s.last_intents and req.intents == ["info"] and (not now or follow_up) and not says_what:
+            req.intents = s.last_intents
         used, notes = ctx.resolve(req, now, s, cat)
         # "compare" means two medicines side by side. With one medicine ("Compare prices") it is not a health
         # question: drop it, or a price turn would also get a uses / side-effects card.
