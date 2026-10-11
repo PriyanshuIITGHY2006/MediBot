@@ -1,0 +1,20 @@
+# MediBot (Python 3.14). Install: python -m venv .venv && .venv/bin/pip install -r requirements.txt
+# core
+pandas==3.0.6
+pyarrow==26.0.0
+numpy==2.5.3
+rapidfuzz==3.14.6
+wordfreq==3.1.1
+httpx==0.28.1
+psycopg[binary]==3.3.6
+# API
+fastapi==0.143.0
+pydantic==2.14.0
+uvicorn[standard]==0.54.0
+# health evidence (local embeddings) + data pipeline
+fastembed==0.9.0
+onnxruntime==1.31.0
+ijson==3.5.1
+openpyxl==3.1.5
+# tests
+pytest==9.1.1

@@ -44,3 +44,7 @@ MISUSE_REFUSAL = ("I can't help with using medicines to get high or in ways they
 def banned_notice(ref: str) -> str:
     return (f"This medicine/combination is prohibited for sale in India ({ref}). It should not be used. "
             "Please consult your doctor for a safe alternative.")
+
+FALLBACK_ERROR = ("Sorry, something went wrong on our side and I couldn't answer that safely. Please try again. "
+                  "If your question is about a prescription medicine, please consult your doctor or pharmacist. "
+                  "In an emergency, call 112 or 108.")

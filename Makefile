@@ -82,3 +82,10 @@ evidence-curated:
 ## 9.7 PharmEasy + Truemeds product URLs from their sitemaps (polite, cached in data/raw/pharmacy_sitemaps)
 pharmacy-urls:
 	systemd-run --user --scope -q -p MemoryMax=6G $(PY) data/pipeline/pharmacy_urls.py
+
+## Phase 12 API (http://127.0.0.1:8000/docs); eval through HTTP against a running server
+api:
+	MEDIBOT_LIVE_PRICES=$${MEDIBOT_LIVE_PRICES:-on} PYTHONPATH=backend $(PY:python=uvicorn) medibot.api.app:app --host 0.0.0.0 --port 8000
+
+eval-http:
+	MEDIBOT_API=$${MEDIBOT_API:-http://127.0.0.1:8000} PYTHONPATH=backend:. $(PY) eval/run.py --bot eval.http_bot:HttpBot --tag http

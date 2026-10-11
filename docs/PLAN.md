@@ -101,10 +101,11 @@
 - Gate met (2026-10-11), stratified 366 turns, model on vs off: A1 1.0 / 1.0, A2 0.0101 / 0.0101, C1 0.9809 / 0.9809, health 1.0, B3 1.0, 0 violations; full eval model off: A1 1.0, A2 0.0101, C1 **0.9847**, 80/80; live latency p50 1.9 s / p95 3.5 s with the reader; backend tests 241 → `docs/RESPONSES.md`
 
 ## Phase 12 — API, sessions, privacy
-- [ ] 12.1 `/api/v1/medibot/query`, `/session/start`, `/session/ack`, `/feedback`, `/optimize`, `/metrics`, `/health`
-- [ ] 12.2 Anonymous sessions
-- [ ] 12.3 PII scrub, forget-me, retention policy
-- [ ] 12.4 Rate limits, input caps, CORS; never a 500 on bad input
+- [x] 12.1 `/api/v1/medibot/query` (PS schema field for field + cards / citations / receipt), `/session/start`, `/session/ack`, `/feedback`, `/optimize` (bill optimizer), `/metrics`, `/health`, `DELETE /session/{id}` (FastAPI, `backend/medibot/api/`)
+- [x] 12.2 Anonymous sessions (UUID; only a SHA-256 is stored; context dropped after 6 h idle)
+- [x] 12.3 No message text stored (outcomes only), PII-scrubbed feedback, forget-me, 30-day retention
+- [x] 12.4 Rate limit 30/min, input ≤ 1,000 chars, control characters stripped, CORS allow-list; never a 500 (safe 503 fallback)
+- Gate met (2026-10-11): 16 API tests; the full eval **through HTTP** = in-process (A1 1.0, A2 0.0101, C1 0.9847, 0 violations, 80/80; p50 31 ms) → `docs/API.md`
 
 ## Phase 13 — Design system
 - [ ] 13.1 Tokens (warm paper / charcoal, ink, pharmacy green, amber, red; light + dark)
