@@ -129,6 +129,15 @@ class Assistant:
         if s.last_intents and req.intents == ["info"] and (not now or follow_up):
             req.intents = s.last_intents  # "and dolo 650?" / "price?" keeps the previous question type
         used, notes = ctx.resolve(req, now, s, cat)
+        # "compare" means two medicines side by side. With one medicine ("Compare prices") it is not a health
+        # question: drop it, or a price turn would also get a uses / side-effects card.
+        if "compare" in req.intents and len(used) < 2:
+            req.intents = [i for i in req.intents if i != "compare"] or ["price" if "price" in text.lower() else "info"]
+            notes = notes + ["compare needs two medicines: dropped"]
+        # an open "which pincode?" question is answered only by a pincode or another store question; anything else
+        # moves on, so the pincode request doesn't repeat on unrelated turns
+        if s.pending == "need_pincode" and not req.pincode and "store" not in req.intents:
+            s.pending = None
         # a store / pincode turn is about places, not the previous medicine: don't drag its card and stamp along
         bare_pin = bool(re.fullmatch(r"\s*(my )?(pin ?code( is)?)?\s*[1-9]\d{5}\s*", text.lower()))
         if not now and ("store" in rules_intents(text) or bare_pin):

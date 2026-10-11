@@ -109,3 +109,43 @@ def test_live_llm_reads_hinglish_medicine():
     from medibot.understanding import _SYSTEM
     out = get_llm().chat_json(_SYSTEM, "mujhe dolo wali goli ka rate batao")
     assert out and any("dolo" in m.lower() for m in out.get("medicines", []))
+
+
+# ---------------------------------------------------------------- follow-up quick replies (bugs seen live, 2026-10-12)
+
+def _types(r):
+    return [c["type"] for c in r["cards"]]
+
+
+def test_single_medicine_compare_is_a_price_turn_not_a_health_answer(bot, monkeypatch):
+    """The live reader read the quick reply "Compare prices" as [price, compare]; with one medicine that used to add
+    a uses / side-effects card to the price answer."""
+    from medibot import assistant, reader
+    real = reader.collect
+
+    def fake(fut, early, started):
+        if fake.next:                       # this turn: what the live reader returned
+            r, fake.next = reader.Reading(status="used", intents=fake.next), None
+            return r
+        return real(fut, early, started)
+    fake.next = None
+    monkeypatch.setattr(assistant.reader, "collect", fake)
+    sid = bot.start_session()["session_id"]
+    bot.acknowledge(sid)
+    first = bot.query(sid, "side effects of dolo 650")
+    assert "info" in _types(first)
+    fake.next = ["price", "compare"]
+    second = bot.query(sid, "Compare prices")
+    assert "prices" in _types(second) and "info" not in _types(second)
+
+
+def test_pincode_request_does_not_repeat_on_an_unrelated_turn(bot):
+    store, subs = converse(bot, ["side effects of dolo 650", "Nearest Jan Aushadhi", "Cheaper identical options"])[1:]
+    assert any(c["type"] == "stores" and c.get("asked_for_pincode") for c in store["cards"])
+    assert "stores" not in _types(subs) and "substitutes" in _types(subs)
+
+
+def test_pincode_still_answers_the_open_question(bot):
+    _, ask, answer = converse(bot, ["dolo 650 price", "Nearest Jan Aushadhi", "110001"])
+    stores = [c for c in answer["cards"] if c["type"] == "stores"]
+    assert stores and stores[0]["pincode"] == "110001" and stores[0]["stores"]
