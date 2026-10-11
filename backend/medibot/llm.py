@@ -161,7 +161,8 @@ class LLM:
         return hashlib.sha256(json.dumps([model, messages], ensure_ascii=False).encode()).hexdigest()
 
     def chat_json(self, system: str, user: str, *, model: str = FAST, max_tokens: int = 300,
-                  max_wait: float = 2.0, reasoning_effort: str | None = None) -> dict | None:
+                  max_wait: float = 2.0, reasoning_effort: str | None = None,
+                  timeout: float | None = None) -> dict | None:
         """Ask for a JSON object. Returns None on any problem (disabled, timeout, rate limit, bad JSON).
         reasoning_effort="low" (gpt-oss): fewer hidden reasoning tokens -> ~0.6 s instead of 1-3 s; used by the
         latency-budgeted callers (second opinion, narrator). Not part of the cache key when None (old entries stay)."""
@@ -190,7 +191,8 @@ class LLM:
             try:
                 self.stats["calls"] += 1
                 self._count(model)   # every request that reaches Groq counts against the daily limit
-                r = self.client.post(url, json=body, headers={"Authorization": f"Bearer {key}"})
+                r = self.client.post(url, json=body, headers={"Authorization": f"Bearer {key}"},
+                                     **({"timeout": timeout} if timeout else {}))
                 if r.status_code == 429:
                     break
                 r.raise_for_status()

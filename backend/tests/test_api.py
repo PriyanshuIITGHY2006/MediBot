@@ -92,6 +92,36 @@ def test_rate_limit(monkeypatch):
     api._hits.clear()
 
 
+def test_forged_forwarded_for_cannot_dodge_the_rate_limit(monkeypatch):
+    """Without a trusted proxy, X-Forwarded-For is ignored: rotating fake addresses still hits the same bucket."""
+    from medibot.api import deps
+    monkeypatch.setattr(api, "RATE", 3)
+    monkeypatch.setattr(deps, "TRUSTED_PROXIES", [])
+    api._hits.clear()
+    with TestClient(api.app) as c:
+        codes = [c.post("/api/v1/session/start", headers={"X-Forwarded-For": f"203.0.113.{i}"}).status_code
+                 for i in range(5)]
+    assert codes[3:] == [429, 429]
+    api._hits.clear()
+
+
+def test_forwarded_for_used_only_behind_a_trusted_proxy(monkeypatch):
+    import ipaddress
+    from starlette.requests import Request
+    from medibot.api import deps
+
+    def req(peer, fwd):
+        scope = {"type": "http", "client": (peer, 1234), "headers": [(b"x-forwarded-for", fwd.encode())]}
+        return Request(scope)
+    monkeypatch.setattr(deps, "TRUSTED_PROXIES", [])
+    assert deps.client_id(req("10.0.0.5", "1.2.3.4")) == "10.0.0.5"                 # header ignored
+    monkeypatch.setattr(deps, "TRUSTED_PROXIES", [ipaddress.ip_network("10.0.0.0/8")])
+    assert deps.client_id(req("10.0.0.5", "1.2.3.4")) == "1.2.3.4"                  # behind our proxy
+    # the client can prepend fake hops; the right-most non-proxy address is the real one
+    assert deps.client_id(req("10.0.0.5", "6.6.6.6, 1.2.3.4, 10.0.0.9")) == "1.2.3.4"
+    assert deps.client_id(req("198.51.100.7", "1.2.3.4")) == "198.51.100.7"          # untrusted peer
+
+
 def test_feedback_metrics_and_forget_me(client):
     from medibot.api import store
     sid = client.post("/api/v1/session/start").json()["session_id"]
@@ -120,6 +150,57 @@ def test_optimize_bill(client):
     assert by["zzzqqq"]["status"] == "not_recognised"
     assert r["monthly_savings_inr"] > 0 and 0 < r["savings_percentage"] < 100 and "doctor" in r["advisory"]
 
+
+
+def test_bill_parse(client):
+    r = client.post("/api/v1/bill/parse", json={"text": "Dolo 650 x 30\nPan 40 - 15 tabs\nAugmentin 625 Duo"}).json()
+    assert [(l["name"], l["quantity"], l["quantity_given"]) for l in r["lines"]] == \
+        [("Dolo 650", 30, True), ("Pan 40", 15, True), ("Augmentin 625 Duo", 10, False)]
+
+
+def test_bill_plan(client):
+    r = client.post("/api/v1/bill/plan", json={"items": [{"name": "Dolo 650", "quantity": 30},
+                                                        {"name": "Augmentin 625 Duo", "quantity": 10},
+                                                        {"name": "zzzqqq", "quantity": 1}]}).json()
+    by = {i["input"]: i for i in r["items"]}
+    assert by["zzzqqq"]["status"] == "not_recognised"
+    assert by["Augmentin 625 Duo"]["mandated_prompt"] == msg.MANDATED_PROMPT
+    best, asked = r["best"], r["as_asked"]
+    assert best and asked and best["total_inr"] <= asked["total_inr"] + 1e-6
+    placed = {ln["item_key"] for c in best["carts"] for ln in c["lines"]}
+    assert placed == {by["Dolo 650"]["key"], by["Augmentin 625 Duo"]["key"]}
+    for c in best["carts"]:
+        assert abs(c["subtotal_inr"] - sum(ln["cost_inr"] for ln in c["lines"])) < 0.01
+        for ln in c["lines"]:
+            assert ln["packs"] * ln["pack_quantity"] >= (30 if ln["item_key"] == by["Dolo 650"]["key"] else 10)
+    assert "doctor" in r["advisory"]
+
+
+def test_bill_plan_rejects_bad_input(client):
+    assert client.post("/api/v1/bill/plan", json={"items": []}).status_code == 422
+    assert client.post("/api/v1/bill/plan", json={"items": [{"name": "Dolo", "quantity": 0}]}).status_code == 422
+    assert client.post("/api/v1/bill/plan", json={"items": [{"name": "Dolo", "product_id": "../x"}]}).status_code == 422
+
+
+
+def test_bill_read_refuses_a_non_image(client):
+    r = client.post("/api/v1/bill/read", content=b"hello", headers={"Content-Type": "image/jpeg"})
+    assert r.status_code == 422 and "image" in r.json()["error"]
+
+
+def test_cabinet_check(client):
+    ids = [client.get("/api/v1/search", params={"q": q}).json()["results"][0]["product_id"] for q in ["Dolo 650", "Combiflam"]]
+    r = client.post("/api/v1/cabinet/check", json={"items": [{"product_id": i, "per_day": 2} for i in ids]}).json()
+    assert len(r["items"]) == 2 and all(i["units_per_month"] == 60 for i in r["items"])
+    assert r["monthly_inr"] >= r["monthly_best_inr"] > 0
+    assert any(f["kind"] == "duplicate" and f["ingredient_a"] == "paracetamol" for f in r["interactions"])
+    assert client.post("/api/v1/cabinet/check", json={"items": [{"product_id": ids[0], "per_day": 0}]}).status_code == 422
+
+
+def test_query_language_is_validated(client):
+    assert client.post("/api/v1/medibot/query", json={"user_query": "Dolo 650 price", "language": "fr"}).status_code == 422
+    r = client.post("/api/v1/medibot/query", json={"user_query": "Dolo 650 price", "language": "hi"}).json()
+    assert r["response_text"] and "cards" in r                    # LLM off in tests: English cards, still a reply
 
 def test_health(client):
     h = client.get("/health").json()
