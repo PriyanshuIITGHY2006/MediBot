@@ -123,10 +123,10 @@
 - [ ] 14.7 Accessibility pass
 
 ## Phase 15 — Hero features
-- [ ] 15.1 Bill Optimizer (text → photo/OCR; cheapest cart incl. split, delivery fee, min order)
-- [ ] 15.2 Pharmacist Card (side-by-side, QR, WhatsApp share, print)
-- [ ] 15.3 My Cabinet (local; monthly cost, refill .ics, interactions, price-drop flag)
-- [ ] 15.4 Hindi / Hinglish
+- [x] 15.1 Bill Optimizer (text → photo/OCR; cheapest cart incl. split, delivery fee, min order) — delivery terms in data/reference/pharmacy_terms.csv still blank
+- [x] 15.2 Pharmacist Card (side-by-side, QR, WhatsApp share, print)
+- [x] 15.3 My Cabinet (local; monthly cost, refill .ics, interactions, price-drop flag)
+- [x] 15.4 Hindi / Hinglish
 
 ## Phase 16 — Trust layer
 - [ ] 16.1 "Why this answer?" safety receipt
