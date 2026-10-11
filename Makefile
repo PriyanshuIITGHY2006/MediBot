@@ -41,8 +41,18 @@ eval-cases:
 	$(PY) eval/build_cases.py
 
 BOT ?= medibot.assistant:Assistant
+ARGS ?=
 eval:
-	PYTHONPATH=backend $(PY) eval/run.py --bot $(BOT)
+	PYTHONPATH=backend $(PY) eval/run.py --bot $(BOT) $(ARGS)
+
+## Phase 11: replies must stay byte-identical with the LLM off (cards + template narrator refactor guard)
+eval-snapshot:
+	MEDIBOT_LLM=off $(PY) eval/snapshot.py --check eval/snapshots/phase11_baseline_llm_off.jsonl
+
+## Phase 11: the same stratified turns with the LLM off and on (background; cached; quota-guarded)
+eval-llm-compare:
+	MEDIBOT_LLM=off PYTHONPATH=backend $(PY) eval/run.py --bot $(BOT) --sample stratified --tag llm-off
+	MEDIBOT_LLM=on PYTHONPATH=backend $(PY) eval/run.py --bot $(BOT) --sample stratified --tag llm-on --pace 5
 
 eval-test:
 	$(PY) -m pytest -q eval/test_eval.py

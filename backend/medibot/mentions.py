@@ -23,7 +23,7 @@ HINGLISH = set("""hai hain ka ki ke ko se me mein mujhe mera meri mere kya koi k
 liye lu lo le lena sasta saste sasti option dawai dawa davai goli parchi bina milega milegi milta kaha kahan kab
 aur ya bhi nahi nhi na toh to bata batao chahiye wala wali wale iska iski uska uski ye yeh wo woh rate kaam aati
 aata karta karti hota hoti bukhar khansi dard pet sir saans""".split())
-STOP = set("""pincode pin zipcode postal i me my we you your it its is are was be been do does did can could should would will shall may might
+STOP = set("""wid wit abt bcz coz cuz thru dat dis wen hw he him his she her hers they them their theirs mom mum mummy dad papa grandma grandpa nani dadi period periods cramps pincode pin zipcode postal lol lmao ngl idk wtf omg bro bruh dude yoo tbh smh pls plz wat cheapr i me my we you your it its is are was be been do does did can could should would will shall may might
 the a an and or of for to in on at with without from by about what which who whom how when where why whether
 please tell give get buy price cost cheap cheaper cheapest alternative alternatives generic substitute same as
 any some there this that these those safe take taking taken use used using side effects effect dose dosage
@@ -132,6 +132,21 @@ def _covers(span_words: list[str], product_text: str) -> bool:
     return True
 
 
+_ALPHA = "abcdefghijklmnopqrstuvwxyz"
+
+
+@lru_cache(maxsize=50_000)
+def _near_common(word: str) -> bool:
+    """One edit away from a common English word ("killin" -> killing, "cheapr" -> cheaper, "wakin" -> waking)."""
+    if not word.isalpha() or len(word) < 4:
+        return False
+    splits = [(word[:k], word[k:]) for k in range(len(word) + 1)]
+    cands = {a + b[1:] for a, b in splits if b} | {a + c + b for a, b in splits for c in _ALPHA} | \
+            {a + b[1] + b[0] + b[2:] for a, b in splits if len(b) > 1} | {a + c + b[1:] for a, b in splits if b for c in _ALPHA}
+    cands.discard(word)
+    return any(_common(c) for c in cands)
+
+
 def _match_span(words: list[str], i: int, j: int, size: int, full_name_only: bool, catalog: Catalog) -> Mention | None:
     """Resolve words[i..j] to one medicine, or None. All acceptance checks live here."""
     span_words = words[i:j + 1]
@@ -146,6 +161,13 @@ def _match_span(words: list[str], i: int, j: int, size: int, full_name_only: boo
     top = hits[0] if hits else None
     if not top:
         return None
+    if not top.confident:
+        # an unsure first hit vs a confident one right behind it: "augmntin 625" -> Augmentin 625 Duo (confident 100),
+        # not Augmin 625 (unsure 80, ranked first by the stem score)
+        sure = next((h for h in hits[1:] if h.confident and h.confidence >= 95 and h.kind == top.kind), None)
+        if sure is not None:
+            hits = [sure] + [h for h in hits if h is not sure]
+            top = sure
     if full_name_only:
         names = set(tokenize(top.name))
         if not top.confident or not all(w in names for w in span_words if not FORM_WORDS.match(w)):
@@ -154,6 +176,8 @@ def _match_span(words: list[str], i: int, j: int, size: int, full_name_only: boo
         # keep unsure matches for the guard, but only with real evidence
         if top.confidence < UNSURE_MIN or (size == 1 and len(words[i]) < 5) or top.kind != "product":
             return None
+        if size == 1 and (zipf_frequency(words[i], "en") >= 2.5 or _near_common(words[i])):
+            return None   # an English word ("slumped", "killin" ~ killing) is not an unsure brand look-alike
     if top.kind != "product":
         return Mention("ingredient", top.name, top.name, (i, j), text, top.confidence)
     rows = catalog.index.df.loc[catalog.index.df["canonical_id"] == top.product_id, ["search_text", "name"]]

@@ -198,6 +198,74 @@ def decide(text: str, catalog: Catalog, context_medicines: list[Mention] | None 
     return dec
 
 
+SECOND_OPINION_FLAGS = ("emergency", "self_harm", "misuse")
+
+
+def apply_second_opinion(dec: Decision, flags: dict) -> list[str]:
+    """Merge the LLM second opinion into a decision. ADD-ONLY and NARROW (see safety/second_opinion.py for why):
+    only emergency, self_harm and misuse; any other key is ignored. Each flag sets only its own field (plus the
+    action / intercept it implies); nothing here clears a flag, lowers an action or removes the mandated prompt.
+    Returns the flags that changed something (receipt / eval stats). Pure function of its inputs."""
+    if dec.action == "emergency":
+        return []
+    f = {k: flags.get(k) is True for k in SECOND_OPINION_FLAGS}
+    if f["self_harm"]:
+        dec.action, dec.emergency, dec.self_harm = "emergency", True, True
+        return ["self_harm"]
+    if f["emergency"]:
+        dec.action, dec.emergency = "emergency", True
+        return ["emergency"]
+    if f["misuse"] and not dec.misuse:
+        dec.misuse, dec.intercept = True, True   # misuse is always intercepted (kernel step 4)
+        if dec.action == "allow":
+            dec.action = "refuse_misuse"
+        return ["misuse"]
+    return []
+
+
+def apply_reading(dec: Decision, flags: dict) -> list[str]:
+    """Merge the model-first reader's danger signals (reader.py). ADD-ONLY, like apply_second_opinion: a flag can
+    only switch a protection on; nothing is cleared or lowered and the mandated prompt is never removed.
+    - emergency / self_harm: always (also on intercept / refusal turns: a missed emergency is the worst failure)
+    - misuse: always
+    - asks_dose: a dosing refusal is added
+    - asks_what_to_take / asks_diagnosis: only when no medicine was named (asking about a named medicine is not
+      prescribing; the rule detectors still apply as before)
+    Returns the names of the flags that changed something."""
+    f = {k: flags.get(k) is True for k in ("emergency", "self_harm", "misuse", "asks_dose", "asks_what_to_take",
+                                            "asks_diagnosis")}
+    added: list[str] = []
+    if dec.action == "emergency":
+        return added
+    if f["self_harm"] or f["emergency"]:
+        dec.emergency = True
+        dec.self_harm = dec.self_harm or f["self_harm"]
+        dec.action = "emergency"
+        return ["self_harm" if f["self_harm"] else "emergency"]
+    if f["misuse"] and not dec.misuse:
+        dec.misuse, dec.intercept = True, True
+        if dec.action == "allow":
+            dec.action = "refuse_misuse"
+        added.append("misuse")
+    if f["asks_dose"] and not dec.dosing_request:
+        dec.dosing_request = True
+        if dec.action == "allow":
+            dec.action = "refuse_dosing"
+        added.append("dosing")
+    if not dec.medicines:
+        if f["asks_what_to_take"] and not dec.prescribing_request:
+            dec.prescribing_request = True
+            if dec.action == "allow":
+                dec.action = "refuse_prescribing"
+            added.append("prescribing")
+        if f["asks_diagnosis"] and not dec.diagnosis_request:
+            dec.diagnosis_request = True
+            if dec.action == "allow":
+                dec.action = "refuse_diagnosis"
+            added.append("diagnosis")
+    return added
+
+
 def safety_lines(dec: Decision) -> list[str]:
     """The fixed safety texts that must appear in the reply, in order."""
     if dec.action == "emergency":

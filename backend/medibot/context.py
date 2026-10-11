@@ -38,6 +38,11 @@ class Session:
     last_intents: list[str] = field(default_factory=list)
     pending: str | None = None
     turns: int = 0
+    # disclaimer policy (Phase 11.4): when the full text was acknowledged, and which text (hash) was shown
+    acknowledged_at: str | None = None
+    disclaimer_hash: str | None = None
+    medical_turns: int = 0
+    full_shown_for: set = field(default_factory=set)   # "intercept" / "health": first time each gets the full text
 
 
 def _mention_for(catalog: Catalog, product_id: str, text: str) -> Mention:

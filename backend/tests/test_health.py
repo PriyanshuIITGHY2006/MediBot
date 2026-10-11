@@ -111,6 +111,15 @@ def test_antacid_milk_topic():
 
 
 @needs_db
+def test_own_monograph_choice_is_deterministic():
+    from medibot.health.evidence import product_passages, query
+    pid = query("SELECT p.canonical_id FROM product_info i JOIN products p USING (product_id) WHERE i.source = 'mid' "
+                "GROUP BY p.canonical_id HAVING count(*) > 1 ORDER BY p.canonical_id LIMIT 1")[0][0]
+    names = {product_passages(pid)[0].meta["written_for"] for _ in range(5)}
+    assert len(names) == 1, names
+
+
+@needs_db
 def test_known_partners():
     names = [n for n, _ in ix.known_partners("warfarin")]
     assert len(names) >= 3

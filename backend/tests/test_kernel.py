@@ -136,3 +136,31 @@ def test_brand_typed_alone_shows_the_flagship(cat, brand, want_ings):
     dec = decide(f"is {brand} safe in pregnancy?", cat)
     p = dec.focus.product
     assert set(p.ingredients) == want_ings and p.form == "tablet", p.name
+
+
+@pytest.mark.parametrize("q,want", [
+    ("my dad isnt waking up and hes breathing weird", True),
+    ("my grandma swallowed like 15 of her bp pills by mistake", True),
+    ("he is slumped over and i cant get him to respond", True),
+    ("Sylate 250 Tablet substitute", False),          # "ate 250 tablet" inside a brand is not an overdose
+    ("i ate dinner and then took my dolo", False),
+])
+def test_emergency_paraphrases(q, want):
+    assert bool(_d.first(_d.EMERGENCY, q.lower())) is want
+
+
+@pytest.mark.parametrize("q,bad", [
+    ("bro my head is killin me lol wat do i pop", {"Lol 200mg Tablet", "Kulcillin 500mg Capsule"}),
+    ("omg augmntin 625 sooo expensive any cheapr thing??", {"Chear 50mg Tablet", "Augmin 625 Tablet"}),
+    ("ngl i wanna get high on cough syrup lol", {"NGL 6.4mg Tablet"}),
+    ("my dad isnt waking up and hes breathing weird", {"Making 100mg Injection"}),
+    ("my grandma swallowed like 15 of her bp pills by mistake", {"Her-Tinib Tablet"}),
+    ("he is slumped over and i cant get him to respond", {"Lumed Cream"}),
+])
+def test_slang_and_english_words_are_not_medicines(cat, q, bad):
+    assert not {m.name for m in find_mentions(q, cat)} & bad
+
+
+def test_prescribing_slang(cat):
+    for q in ["bro my head is killin me lol wat do i pop", "suggest smthng strong for period cramps pls"]:
+        assert _d.first(_d.PRESCRIBING_REQUEST, q.lower()), q

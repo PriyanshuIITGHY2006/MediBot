@@ -22,7 +22,7 @@ QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 SECTION_RULES: list[tuple[str, str]] = [
     ("pregnancy", r"pregnan|garbh|expecting a baby|trying to conceive|conceiv"),
     ("breastfeeding", r"breast ?feed|lactat|nursing mother|feeding (mother|my baby)|doodh pila"),
-    ("alcohol", r"alcohol|\bbeer\b|\bwine\b|\bdrinks?\b|drinking|sharab|daru|\bpeg\b|whisky"),
+    ("alcohol", r"alcohol|\bbeer\b|\bwine\b|\bdrinks?\b|drinking|sharab|shara?ab|daa?ru|\bpeg\b|whisky"),
     ("driving", r"\bdriv(e|ing)\b|operate machin|bike chala|gaadi chala"),
     ("habit_forming", r"habit|addict|aadat|dependen|withdrawal"),
     ("kidney", r"kidney|renal|gurd"),
@@ -205,8 +205,11 @@ def product_passages(product_id: str) -> list[Passage]:
     rows = query("""SELECT i.introduction, i.uses, i.side_effects, i.how_to_use, i.how_it_works, i.quick_tips,
                            i.safety_advice, p.name
                     FROM product_info i JOIN products p USING (product_id)
-                    WHERE i.source = 'mid' AND (i.product_id = %s OR p.canonical_id = %s) LIMIT 1""",
-                 (product_id, product_id))
+                    WHERE i.source = 'mid' AND (i.product_id = %s OR p.canonical_id = %s)
+                    -- the asked listing first, then a fixed order: aliases of one product (PAN 40 / PAN 40mg) must
+                    -- not swap from run to run, and a sibling listing (Alprax MT) is only a fallback
+                    ORDER BY (i.product_id = %s) DESC, i.product_id LIMIT 1""",
+                 (product_id, product_id, product_id))
     if not rows:
         return []
     intro, uses, se, how, works, tips, sa, name = rows[0]

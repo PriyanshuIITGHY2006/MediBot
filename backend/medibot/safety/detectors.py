@@ -18,11 +18,17 @@ EMERGENCY = _rx(
     r"(can'?t|cannot|unable to|not able to|difficulty|trouble) breath(e|ing)|not breathing|stopped breathing|"
     r"saans (nahi|nhi|lene mein)",
     r"seene (mein|me) dard",
-    r"collapsed|unconscious|fainted and|not waking|behosh",
+    r"collapsed|unconscious|fainted and|not waking|behosh|passed out|"
+    r"(is ?n'?t|is not|won'?t|wont|not|can'?t|cant|isnt|nahi) (waking|wake) ?up|uth (nahi|nhi) (raha|rahi)|"
+    r"(not|isn'?t|isnt) (responding|moving)|slumped|(won'?t|wont|doesn'?t|does not|can'?t|cant) (get (him|her|them) to )?respond",
+    r"breath(ing)? (weird|weirdly|strange|strangely|funny|fast|heavy|heavily|badly|noisy)|gasping|"
+    r"(lips|face|skin) (are |is )?(turning |gone |going )?(blue|purple|grey|gray)|blue lips",
     r"seizure|fits\b|convulsion|daura",
     r"(suicid|kill (myself|me)|end (my|this) life|want to die|don'?t want to live|marna chahta|marna chahti|khudkushi|"
     r"self.?harm|hurt myself)",
     r"overdose|took too many|swallowed \d+|(\d{2,}|too many) (tablets|pills)|zyada goli",
+    r"\b(swallowed|took|taken|ate|kha li|kha liya|kha liye)\b[^.?!]{0,30}\b(\d{2,}|many|lots of|a lot of|bunch of|"
+    r"whole (strip|bottle|pack))\b[^.?!]{0,25}\b(pills?|tablets?|tabs?|capsules?|goli|golis|meds|medicines?)",
     r"(face|mouth) (is )?drooping|can'?t speak|slurred speech|sudden weakness|stroke",
     r"(lips|tongue|face|throat) .*(swell|closing)|throat (is )?closing|anaphyla",
     r"vomit(ing)? blood|coughing (up )?blood|blood in vomit|heavy bleeding|bleeding heavily|won'?t stop bleeding",
@@ -51,8 +57,9 @@ SYMPTOM_STATEMENT = _rx(
 PRESCRIBING_REQUEST = _rx(
     r"(what|which|kaunsi|kaun si|konsi) (medicine|medication|tablet|drug|antibiotic|painkiller|pill|syrup|dawai|dawa|goli)"
     r".*\b(should|to take|best|for|lu|lena|lene|le)\b",
-    r"\b(suggest|recommend|prescribe|tell me)\b.*\b(medicine|medication|tablet|antibiotic|painkiller|something|dawai|drug)",
+    r"\b(suggest|recommend|prescribe|tell me|give me)\b.*\b(medicine|medication|tablet|antibiotic|painkiller|something|smthng|smth|sumthing|kuch|dawai|drug)",
     r"what should i (take|use|give)|kya (lu|le|lena chahiye)|kya khau",
+    r"\b(what|wat|wht|which) (should|do|can|shud|cn) (i|u|we) (take|pop|have|use|eat|try)\b",
     r"(best|strongest|safest) (medicine|antibiotic|painkiller|sleeping pill)",
 )
 DOSING_REQUEST = _rx(

@@ -88,9 +88,35 @@ The kernel makes every safety decision in code; no LLM is involved in it. Order 
 4. **Misuse** ("to get high") → intercept + refusal. **Prescription-seeking** → refusal under the mandated prompt.
 5. **Diagnosis request / symptom statement** → `DIAGNOSIS_REFUSAL` (no condition named).
 6. **Prescribing / dosing request** → `PRESCRIBING_REFUSAL` / `DOSING_REFUSAL`.
-7. **Output check** (`output_check.py`) on every reply: diagnosis phrases, personal dosing, "you should take",
-   "doesn't need a prescription" → the text is replaced by the fixed refusal, never reworded.
+7. **Output check** (`output_check.py`) on every card: diagnosis phrases, personal dosing, "you should take",
+   "safe for you", "doesn't need a prescription" (English + Hinglish) → the failing card is replaced by the fixed
+   refusal, never reworded; the other cards stay (Phase 11, `docs/RESPONSES.md`).
 8. Every decision returns a **safety receipt** (what fired, which data, legal reference).
+9. **Second opinion** (optional LLM, add-only). See below.
+
+### Model-first reader and second opinion (plan 6.6, Phase 11)
+
+The rule detectors are broad but literal, so slang and paraphrases get past them ("my dad isnt waking up", "wat do
+i pop", "lol" read as the brand Lol 200mg). Since Phase 11, **a model reads every message first**
+(`backend/medibot/reader.py`, claude-haiku-5.5 through the Cline gateway, 3.5 s budget). It returns JSON only; it
+never decides and never writes facts.
+
+- **Medicine names** are kept only if every word was typed by the user, then resolved by `find_mentions` and judged
+  by `judge_medicine`. The model can't add a medicine ("Remo Tablet" for "varemo" is dropped).
+- **Rule matches stay authoritative for exact names:** a rule match the model didn't list is kept if it is an exact
+  name made of rare words, so a real restricted brand the model missed keeps its intercept (A1 can't drop). Slang
+  and English look-alikes are dropped.
+- **Danger flags are add-only** (`kernel.apply_reading()`, a pure function): emergency and self-harm on every turn,
+  even over an intercept; misuse and dosing always; prescribing and diagnosis only when no medicine was named.
+  Nothing is cleared or lowered, and the mandated prompt is never removed.
+- **Fallback:** on timeout, error, no key or `MEDIBOT_READER=off`, the rules work alone. The rules themselves were
+  hardened for this case (slang stop list, English-word guard, wider emergency and prescribing patterns).
+
+**The older second opinion** (`safety/second_opinion.py`, gpt-oss-20b) now runs only when the reader is
+unavailable. It is narrowed to emergency, self_harm and misuse. Measured 2026-10-11 on the stratified LLM-on
+sample, its broader version (diagnosis / prescribing / dosing / rx_seeking flags + medicine names) tagged about 38
+plain information questions as "prescribing" and invented "Remo Tablet" for "varemo 5% Eye sasta". That raised A2
+from 1.01% to 1.51% and cut grounded health answers from 100% to 84.6%, so those flags were removed.
 
 Fixed safety texts live in `messages.py` and avoid trigger phrases even inside refusals.
 

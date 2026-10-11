@@ -60,7 +60,7 @@
 - [x] 6.3 Mandated prompt verbatim, always first (`messages.py`); output check (`output_check.py`)
 - [x] 6.4 Safety receipt per decision
 - [x] 6.5 Gate met on eval: **A1 100%**, FP **1.0%**, **0** violations, C1 89% → measurable 57/80 (`make eval`, `make kernel-test` 29 pass)
-- [ ] 6.6 LLM second-opinion classifier (add-only flags) — with Phase 7, once an API key is available
+- [x] 6.6 Add-only LLM safety layer → superseded by the model-first reader (Phase 11): emergency / self-harm / misuse / dose / what-to-take / diagnosis flags, add-only (`kernel.apply_reading`); the broad second opinion was measured and narrowed (it raised A2 to 1.51%)
 
 ## Phase 7 — Understanding + context
 - [x] 7.1 Rules first (`backend/medibot/understanding.py`): multi-intent, ordinals, "500 wala", "gel one", pincode, back-references (EN + Hinglish)
@@ -92,10 +92,12 @@
 - Gate met: health questions **30/30 grounded + cited (100%)**, uncited 0; C1 98.3%, A1 100%, A2 1.01%, violations 0, errors 0, 80/80 measurable; backend tests 101 passed, 1 skipped
 
 ## Phase 11 — Response builder
-- [ ] 11.1 Card types (InterceptBanner, EmergencyCard, MedicineCard, SubstituteTable, PriceStrip, InteractionCard, InfoCard, Clarify, Disclaimer, QuickReplies)
-- [ ] 11.2 Narrator with template fallback
-- [ ] 11.3 Output check for diagnosis/prescribing language
-- [ ] 11.4 Disclaimer policy
+- [x] 11.1 Card types (InterceptBanner, EmergencyCard, MedicineCard, SubstituteTable, PriceStrip, InteractionCard, InfoCard, Clarify, Disclaimer, QuickReplies); cards check 100% of turns (`backend/medibot/cards.py`)
+- [x] 11.2 Narrator with template fallback (`narrator.py`): LLM lead only on price / substitute / store / compare turns, 5 checks, 116 leads shipped on the sample with 0 invented facts
+- [x] 11.3 Output check: EN + Hinglish patterns, per-card replacement; 0 false flags on the 653 replies
+- [x] 11.4 Disclaimer policy: A3 rate 0.9936 → **1.0**
+- [x] 11.5 Model-first reader (`reader.py`, claude-haiku-5.5 via Cline, Groq / rules fallback): any wording (slang, Hinglish, typos, off-topic). Typed-words guard on medicine names; rule matches on exact rare brand words stay authoritative
+- Gate met (2026-10-11), stratified 366 turns, model on vs off: A1 1.0 / 1.0, A2 0.0101 / 0.0101, C1 0.9809 / 0.9809, health 1.0, B3 1.0, 0 violations; full eval model off: A1 1.0, A2 0.0101, C1 **0.9847**, 80/80; live latency p50 1.9 s / p95 3.5 s with the reader; backend tests 241 → `docs/RESPONSES.md`
 
 ## Phase 12 — API, sessions, privacy
 - [ ] 12.1 `/api/v1/medibot/query`, `/session/start`, `/session/ack`, `/feedback`, `/optimize`, `/metrics`, `/health`

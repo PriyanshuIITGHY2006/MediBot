@@ -75,14 +75,14 @@ Return JSON: {"intents": [...], "medicines": [...]}.
 Return only the JSON."""
 
 
-def understand(text: str, *, have_mentions: bool, have_context: bool) -> Request:
+def understand(text: str, *, have_mentions: bool, have_context: bool, allow_llm: bool = True) -> Request:
     """Rules first. The LLM is asked only when the rules found no medicine, no reference to the conversation
     and no other handle — and the message is long enough to plausibly name one."""
     r = rules(text)
     needs_llm = (not have_mentions and r.ordinal is None and r.strength is None and r.form is None
                  and r.pincode is None and not (r.refers_back and have_context)
                  and len(text.split()) >= 3 and "greeting" not in r.intents)
-    if needs_llm:
+    if needs_llm and allow_llm:
         out = get_llm().chat_json(_SYSTEM, text, model=FAST, max_tokens=200)
         if isinstance(out, dict):
             r.used_llm = True

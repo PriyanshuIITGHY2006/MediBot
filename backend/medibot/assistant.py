@@ -5,20 +5,27 @@ the message. Facts (prices, stores) come from the processed data, never from a m
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import time
 import uuid
 from functools import lru_cache
 from pathlib import Path
 
 import pandas as pd
 
+from medibot import cards as C
 from medibot import context as ctx
 from medibot.catalog import load_catalog
-from medibot.mentions import find_mentions
+from medibot import reader
+from medibot.mentions import FORM_WORDS, NUMBER, _common, find_mentions, tokenize
 from medibot.safety import messages as msg
-from medibot.safety.kernel import Decision, decide, safety_lines
-from medibot.safety.output_check import violations
+from medibot.llm import get_llm
+from medibot.narrator import narrate
+from medibot.safety import second_opinion
+from medibot.safety.kernel import Decision, apply_reading, apply_second_opinion, decide, safety_lines
+from medibot.safety.output_check import check_cards, violations
 from medibot.prices.engine import PriceEngine, freshness
 from medibot.substitutes import find_substitutes, refresh_with_live
 from medibot.substitutes import render as render_substitutes
@@ -84,13 +91,28 @@ class Assistant:
         return {"session_id": sid, "disclaimer": msg.DISCLAIMER, "requires_acknowledgement": True}
 
     def acknowledge(self, session_id):
-        self.sessions.setdefault(session_id, ctx.Session()).acknowledged = True
+        s = self.sessions.setdefault(session_id, ctx.Session())
+        s.acknowledged = True
+        s.acknowledged_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        s.disclaimer_hash = DISCLAIMER_HASH   # which exact text was acknowledged (stored server-side in Phase 12)
 
     def query(self, session_id: str, text: str) -> dict:
         s = self.sessions.setdefault(session_id, ctx.Session())
         cat = self.catalog
+        # model-first reader (reader.py) runs alongside the rule-based matching; it only READS the message
+        t_r = time.time()
+        r_fut, r_early = reader.start(text, ", ".join(m.name for m in s.focus[:2]) or None)
         now = find_mentions(text, cat)
-        req = understand(text, have_mentions=bool(now), have_context=bool(s.focus))
+        req = understand(text, have_mentions=bool(now), have_context=bool(s.focus), allow_llm=r_fut is None)
+        reading = reader.collect(r_fut, r_early, t_r)
+        if reading.ok:
+            now = merge_reading(now, reading, cat)
+            if reading.intents:
+                req.intents = reading.intents
+            elif reading.flags.get("off_topic") or reading.flags.get("greeting"):
+                req.intents = ["greeting"]
+            req.refers_back = req.refers_back or reading.flags.get("refers_back", False)
+            req.used_llm = True
         for w in req.medicine_words:  # LLM-suggested words still pass the deterministic resolver
             for m in find_mentions(w, cat):
                 if m.confident and all(m.ref != x.ref for x in now):
@@ -102,15 +124,46 @@ class Assistant:
         used, notes = ctx.resolve(req, now, s, cat)
         dec = decide(text, cat, mentions=used)
         dec.receipt = notes + dec.receipt
+        if reading.ok:
+            added = apply_reading(dec, reading.flags)
+            if added:
+                dec.receipt.append(f"reader added: {', '.join(added)} -> {dec.action}")
+        elif reading.status != "skipped" or reading.reason != "LLM off":
+            dec.receipt.append(f"reader {reading.status}: {reading.reason} (rules only)")
         if req.used_llm:
             dec.receipt.append("message read with LLM help (medicine words / intents only)")
 
+        # 6.6 second opinion: runs in parallel with fact building; can only ADD protections
+        t_so = time.time()
+        so_future, so_early = (second_opinion.start(text, dec.action) if not reading.ok else
+                               (None, second_opinion.Opinion("skipped", "reader already screened this message")))
+        fact_cards, shown, extra = self._facts(dec, req, s)
+        opinion = second_opinion.collect(so_future, so_early, t_so)
+        so_info = {"status": opinion.status, "reason": opinion.reason, "seconds": opinion.seconds,
+                   "flags": opinion.flags, "added": [], "before": dec.action, "after": dec.action}
+        if opinion.status == "used":
+            added = apply_second_opinion(dec, opinion.flags)
+            so_info.update(added=added, after=dec.action)
+            if added:
+                dec.receipt.append(f"second opinion added: {', '.join(added)} ({so_info['before']} -> {dec.action})")
+                fact_cards, shown, extra = self._facts(dec, req, s)   # facts must follow the stricter decision
+        elif opinion.status != "skipped" or opinion.reason not in ("LLM off",):
+            dec.receipt.append(f"second opinion {opinion.status}: {opinion.reason}".rstrip(": "))
         parts = safety_lines(dec)
-        facts, shown, extra = self._facts(dec, req, s)
-        reply = "\n\n".join(parts + ([facts] if facts else []))
-        if facts and violations(facts):  # never ship an unsafe informational sentence
-            reply = "\n\n".join(parts + [msg.PRESCRIBING_REFUSAL])
+        cards: list[C.Card] = []
+        if parts:
+            cards.append(C.EmergencyCard(parts[0], dec.self_harm) if dec.action == "emergency" else
+                         C.InterceptBanner(parts, dec.intercept, dec.banned))
+        # output check per card: an unsafe card becomes the fixed refusal, the other cards survive
+        fact_cards, replaced = check_cards(fact_cards, lambda t: C.RefusalCard(replaced=t))
+        for t, why in replaced:
+            dec.receipt.append(f"output check replaced the {t} card ({', '.join(why)})")
+        facts = C.facts_text(fact_cards)
+        if facts and violations(facts):  # backstop: a violation that only appears across card boundaries
+            fact_cards = [C.RefusalCard(replaced="facts")]
+            facts = None
             dec.receipt.append("output check replaced the informational text")
+        cards += fact_cards
         ctx.update(s, req, [m.mention for m in dec.medicines], shown)
 
         focus = dec.focus
@@ -118,14 +171,29 @@ class Assistant:
         clarify = []
         if focus and not focus.mention.confident:
             clarify = [focus.mention.name] + [cat.products[a].name for a in focus.mention.alternatives if a in cat.products]
-            reply += "\n\nDid you mean: " + " / ".join(clarify[:3]) + "?"
+            cards.append(C.Clarify(clarify[:3]))
+        if not any(isinstance(c, C.SAFETY_CARDS) for c in cards) and not facts and not clarify:
+            cards.append(C.Fallback())
+        reply = compose(cards)
         medical = bool(dec.medicines) or dec.action != "allow"
         intent = ("emergency" if dec.emergency else "symptom" if dec.diagnosis_request else
                   "price" if "price" in req.intents and "substitute" not in req.intents else req.intents[0])
+        story = narrate(cards, req.intents, text, safety_turn=bool(parts), catalog=cat)
+        if story.reason and story.reason != "LLM off":
+            dec.receipt.append(f"narrator: {story.source} ({story.reason})")
+        llm = get_llm()
+        if llm.enabled:
+            dec.receipt.append(llm.usage_line())
+        disc = disclaimer_card(s, medical, dec, extra, text, req.intents)
+        qr = C.quick_replies(cards, dec.intercept)
+        ui = ([story.lead] if story.lead else []) + cards + ([disc] if disc else []) + ([qr] if qr else [])
         return {
             "session_id": session_id,
-            "response_text": reply or ("I can help with medicine prices, identical cheaper alternatives, general "
-                                       "medicine information and Jan Aushadhi stores. Which medicine are you asking about?"),
+            "response_text": reply,
+            "cards": [c.as_contract() for c in ui],
+            "narrator": {"source": story.source, "reason": story.reason},
+            "second_opinion": so_info,
+            "reader": reading.as_receipt(),
             "intent": intent,
             "safety_guard": {
                 "is_restricted_schedule_h": bool(focus and focus.restricted),
@@ -142,8 +210,10 @@ class Assistant:
             "clarification_options": clarify[:3],
             "health_answer": extra.get("health_answer"),
             "interactions": extra.get("interactions"),
-            "disclaimer": msg.SHORT_DISCLAIMER if medical else None,
+            # every medical turn (incl. unrecognised-medicine and health-topic turns) carries the disclaimer
+            "disclaimer": disc.text if disc else None,
             "disclaimer_acknowledged": s.acknowledged,
+            "disclaimer_acknowledged_at": s.acknowledged_at,
             "receipt": dec.receipt,
         }
 
@@ -166,25 +236,21 @@ class Assistant:
             return None
         return verified[0]
 
-    # ------------------------------------------------ facts (templated; the LLM narrator comes later)
-    def _facts(self, dec: Decision, req, s: ctx.Session) -> tuple[str | None, list[str] | None, dict]:
+    # ------------------------------------------------ facts -> cards (Phase 11; wording owned by cards.py)
+    def _facts(self, dec: Decision, req, s: ctx.Session) -> tuple[list[C.Card], list[str] | None, dict]:
         extra: dict = {}
         if dec.action in ("emergency", "refuse_misuse") or dec.banned:
-            return None, None, extra
-        lines: list[str] = []
+            return [], None, extra
+        lines: list[C.Card] = []
         if "store" in req.intents or s.pending == "need_pincode" or (req.pincode and s.last_intents and "store" in s.last_intents):
             if req.pincode:
                 stores = nearest_kendras(req.pincode)
                 extra["stores"] = stores
                 s.pending = None
-                if stores:
-                    lines.append("Jan Aushadhi Kendras near " + req.pincode + ":\n" + "\n".join(
-                        f"• {k['store_code']}: {k['address']}, {k['district']} {k['pincode']}" for k in stores))
-                else:
-                    lines.append(f"I couldn't find a Jan Aushadhi Kendra listed for pincode {req.pincode}.")
+                lines.append(C.StoreCard(req.pincode, stores))
             else:
                 s.pending = "need_pincode"
-                lines.append("Please share your 6-digit pincode and I'll find the nearest Jan Aushadhi Kendras.")
+                lines.append(C.StoreCard(None, asked_for_pincode=True))
         shown: list[str] | None = None
         answers: list[HealthAnswer] = []
         no_advice = dec.prescribing_request or dec.diagnosis_request or dec.dosing_request
@@ -199,41 +265,41 @@ class Assistant:
             found = ix.check(items)
             extra["interactions"] = [f.as_contract() for f in found]
             txt, cites = ix.render(items, found)
-            lines.append(txt)
+            lines.append(C.InteractionCard(txt, "check", extra["interactions"]))
             answers.append(HealthAnswer("", ix_cites(cites), ["interactions"], [], True))
             wants_health = False
         elif wants_health and "interaction" in req.intents and len(meds) == 1 and len(meds[0][2]) == 1 \
-                and not re.search(r"alcohol|drink|beer|wine|sharab|daru|milk|food", text_l(req)):
+                and not re.search(r"alcohol|drink|beer|wine|sharab|shara?ab|daa?ru|milk|food", text_l(req)):
             ing = meds[0][2][0]
             partners = ix.known_partners(ing)
             if partners:
                 extra["interactions"] = [{"kind": "known_partner", "ingredient_a": ing, "ingredient_b": n,
                                           "severity": sev} for n, sev in partners]
-                lines.append(f"Medicines with a major or moderate interaction with {ing} (DDInter) [1]: "
-                             + ", ".join(f"{n} ({sev.lower()})" for n, sev in partners)
-                             + ". This is not a complete list. " + ix.ADVICE)
+                lines.append(C.InteractionCard(
+                    f"Medicines with a major or moderate interaction with {ing} (DDInter) [1]: "
+                    + ", ".join(f"{n} ({sev.lower()})" for n, sev in partners)
+                    + ". This is not a complete list. " + ix.ADVICE, "known_partners", extra["interactions"]))
                 answers.append(HealthAnswer("", ix_cites([ix.DDINTER]), ["interactions"], [], True))
                 wants_health = False
         compare = wants_health and "compare" in req.intents and len(meds) >= 2
         for mv in dec.medicines[:2]:
             p = mv.product
             if not p:
-                lines.append(f"{mv.mention.name.title()} is a generic medicine name.")
+                lines.append(C.MedicineCard(mv.mention.name, generic=True, category=mv.category))
                 if wants_health and not answers or compare:
                     a = answer_medicine(mv.mention.name, None, (mv.mention.ref,), req.text,
                                         habit_forming=habit_forming_set((mv.mention.ref,)),
                                         sections_override=["uses"] if compare else None)
                     answers.append(a)
                     if a.text:
-                        lines.append(renumber(a, answers[:-1]))
+                        lines.append(info_card(a, answers[:-1]))
                 continue
-            lines.append(f"{p.name} — contains {p.composition or 'composition not verified'}.")
+            card = C.MedicineCard(p.name, p.product_id, p.composition, p.category)
+            lines.append(card)
             if wants_health and not answers or compare:
                 info = self._brand_info_product(mv)
                 if info:
-                    brand = mv.mention.text.title()
-                    lines.append(f"{p.name} has no verified composition, so the information below is for {info.name}, "
-                                 f"the {brand} product with a verified composition — other {brand} products may differ.")
+                    card.info_from, card.brand = info.name, mv.mention.text.title()
                 src = info or p
                 hf = habit_forming(src.product_id)
                 a = answer_medicine(src.name, src.composition, src.ingredients, req.text,
@@ -242,53 +308,41 @@ class Assistant:
                                     product_id=src.product_id, form=src.form)
                 answers.append(a)
                 if a.text:
-                    lines.append(renumber(a, answers[:-1]))
+                    lines.append(info_card(a, answers[:-1]))
             if "substitute" in req.intents and "substitutes" not in extra:
                 res = refresh_with_live(find_substitutes(p, self.catalog, price_book()), self.catalog, self.prices)
                 extra["substitutes"] = [c.as_contract() for c in res.substitutes]
-                lines.append(render_substitutes(res))
+                lines.append(C.SubstituteTable(render_substitutes(res), p.product_id, extra["substitutes"], res.note))
                 # remember the list (catalog products only) for "the second one" / "the cheapest one"
                 shown = [c.product_id for c in res.substitutes if c.tier == "brand"]
             if "price" in req.intents:
                 quotes = self.prices.quotes(p)
                 extra.setdefault("prices", []).extend(quotes)
-                for q in quotes[:4]:
-                    unit = f", ₹{q['price_per_unit_inr']:.2f}/unit" if q.get("price_per_unit_inr") else ""
-                    stock = "" if q.get("in_stock") is None else (" · in stock" if q["in_stock"] else " · out of stock")
-                    lines.append(f"• {q['platform']}: ₹{q['price_inr']:.2f} ({q.get('pack_label') or 'pack'}{unit}) — "
-                                 f"{freshness(q)}{stock}")
-                    if q.get("above_nppa_ceiling"):
-                        c = q["above_nppa_ceiling"]
-                        lines.append(f"  ⚠ above the government ceiling price of ₹{c['ceiling_per_unit_inr']:.2f}/unit ({c['source']})")
-                if not quotes:
-                    lines.append("• No recent price on record for this pack.")
+                lines.append(C.PriceStrip(p.product_id, [dict(q, freshness=freshness(q)) for q in quotes[:4]]))
         if missed:
             a = answer_topic_id("missed_dose")
             if a:
                 answers.append(a)
-                lines.append(renumber(a, answers[:-1]))
+                lines.append(info_card(a, answers[:-1], kind="topic"))
         if compare:
             sets = [set(m[2]) for m in meds[:2]]
-            if sets[0] == sets[1]:
-                lines.append(f"{meds[0][0]} and {meds[1][0]} have the same active ingredients"
-                             + (" (check the strengths above)." if meds[0][1] != meds[1][1] else "."))
-            else:
-                for (n, _, ings, _), other in ((meds[0], sets[1]), (meds[1], sets[0])):
-                    extra_ings = sorted(set(ings) - other)
-                    if extra_ings:
-                        lines.append(f"{n} also contains {', '.join(extra_ings)}.")
+            extra_rows = [(n, sorted(set(ings) - other)) for (n, _, ings, _), other in ((meds[0], sets[1]), (meds[1], sets[0]))]
+            card = C.CompareCard((meds[0][0], meds[1][0]), sets[0] == sets[1], meds[0][1] == meds[1][1],
+                                 [(n, e) for n, e in extra_rows if e])
+            if card.same_ingredients or card.extra:
+                lines.append(card)
         if not dec.medicines and dec.action == "allow" and not no_advice and not lines:
             a = answer_topic(req.text)
             if a:
                 answers.append(a)
-                lines.append(a.text)
+                lines.append(info_card(a, [], kind="topic"))
         if answers:
             merged = merge_answers(answers)
             extra["health_answer"] = merged.as_contract()
             src = render_sources(merged)
             if src:
-                lines.append(src)
-        return ("\n".join(lines) or None), shown, extra
+                lines.append(C.SourcesCard(src, extra["health_answer"]["citations"]))
+        return lines, shown, extra
 
 
 # ------------------------------------------------ health helpers
@@ -323,6 +377,60 @@ def _offset(prev: list[HealthAnswer]) -> int:
     return sum(len(a.citations) for a in prev)
 
 
+DISCLAIMER_HASH = hashlib.sha256(msg.DISCLAIMER.encode()).hexdigest()[:16]
+FULL_EVERY = 5   # repeat the full disclaimer every Nth medical turn
+
+
+MEDICAL_WORDS = re.compile(r"medicine|medication|tablet|capsule|syrup|drops?\b|cream|ointment|injection|dawai|dawa|"
+                           r"goli|\brx\b|side ?effects?|substitute|generic|alternative|dose|pharmacy|chemist|"
+                           r"price|kitne|rate|sasta|sasti", re.I)
+
+
+def disclaimer_card(s: ctx.Session, medical: bool, dec: Decision, extra: dict, text: str = "",
+                    intents: list[str] | None = None) -> C.Disclaimer | None:
+    """Disclaimer policy (11.4). Short text on every medical turn (a medicine, a safety action, a health answer, or a
+    medicine question we could not resolve — not greetings / off-topic); the FULL text on the first intercept and
+    the first health answer of a session, every FULL_EVERY-th medical turn, and every medical turn until
+    acknowledged. Lives in a card / the `disclaimer` field only, so response_text stays the facts + safety texts."""
+    asked_about_medicine = bool(MEDICAL_WORDS.search(text)) and "greeting" not in (intents or [])
+    if not medical and not extra.get("health_answer") and not asked_about_medicine:
+        return None
+    s.medical_turns += 1
+    reasons = []
+    if not s.acknowledged:
+        reasons.append("not acknowledged")
+    if dec.intercept and "intercept" not in s.full_shown_for:
+        reasons.append("first intercept")
+        s.full_shown_for.add("intercept")
+    if extra.get("health_answer") and "health" not in s.full_shown_for:
+        reasons.append("first health answer")
+        s.full_shown_for.add("health")
+    if s.medical_turns % FULL_EVERY == 0:
+        reasons.append(f"every {FULL_EVERY}th medical turn")
+    full = bool(reasons)
+    return C.Disclaimer(msg.DISCLAIMER if full else msg.SHORT_DISCLAIMER, full, not s.acknowledged)
+
+
+def compose(cards: list[C.Card]) -> str:
+    """response_text from the cards: safety block, then the fact cards (one block, single newlines), then
+    "Did you mean"; or the fallback. Same layout as the replies before cards existed."""
+    safety = [c.render() for c in cards if isinstance(c, C.SAFETY_CARDS) and not isinstance(c, C.RefusalCard)]
+    refusal = list(dict.fromkeys(c.render() for c in cards if isinstance(c, C.RefusalCard)))  # once, even if 2 cards
+    facts = C.facts_text(cards)
+    blocks = safety + refusal + ([facts] if facts else [])
+    reply = "\n\n".join(blocks)
+    for c in cards:
+        if isinstance(c, C.Clarify):
+            reply += "\n\n" + c.render()
+    if not reply:
+        reply = next((c.render() for c in cards if isinstance(c, C.Fallback)), C.Fallback().render())
+    return reply
+
+
+def info_card(a: HealthAnswer, prev: list[HealthAnswer], kind: str = "medicine") -> C.InfoCard:
+    return C.InfoCard(renumber(a, prev), a.sections, a.missing, a.grounded, kind)
+
+
 def renumber(a: HealthAnswer, prev: list[HealthAnswer]) -> str:
     """Citation numbers continue across several answers in one reply ([1][2] then [3] ...)."""
     off = _offset(prev)
@@ -337,3 +445,34 @@ def merge_answers(answers: list[HealthAnswer]) -> HealthAnswer:
         off += len(a.citations)
     return HealthAnswer("", cites, [s for a in answers for s in a.sections], [m for a in answers for m in a.missing],
                         any(a.grounded for a in answers))
+
+
+# ------------------------------------------------ model-first reader merge
+SLANG = set("""wid wit abt bcz coz cuz thru dat dis wen hw r n y lol lmao lmfao rofl ngl idk idc wtf wth omg omfg bro bruh dude yo yoo yaar yar tbh smh fr pls plz
+plss u ur wat wht k kk ok okay hmm hmmm umm uh ya yeah yea nah haha hehe btw imo imho fyi asap thx ty""".split())
+
+
+def _rule_mention_is_safe_alone(m) -> bool:
+    """A rule match the model did NOT list is kept only when it is an exact name made of rare words: a real brand
+    the model missed ("alprax") keeps its intercept; slang or a near-miss of an English word ("lol", "ngl",
+    "waking" -> Making, "cheapr" -> Chear) is dropped."""
+    words = [w for w in tokenize(m.text) if not NUMBER.match(w) and not FORM_WORDS.match(w)]
+    # judged on the BRAND word: "Medela Mini Electric Breast Pump" is a real product even though "mini",
+    # "electric", "breast", "pump" are English words; "lol" / "wid" / "waking" fail on the brand word itself
+    if not words or words[0] in SLANG or _common(words[0]):
+        return False
+    if m.kind == "ingredient":
+        return True
+    name = set(tokenize(m.name))
+    return all(w in name for w in words)          # typed exactly, not a fuzzy look-alike
+
+
+def merge_reading(now: list, reading, cat) -> list:
+    """Rule mentions + the model's medicine phrases (resolved by OUR resolver, never trusted as-is)."""
+    phrases = [set(tokenize(p)) for p in reading.medicines]
+    kept = [m for m in now if any(set(tokenize(m.text)) & p for p in phrases) or _rule_mention_is_safe_alone(m)]
+    for phrase in reading.medicines:
+        for m in find_mentions(phrase, cat):
+            if all(m.ref != x.ref for x in kept):
+                kept.append(m)
+    return kept
