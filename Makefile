@@ -1,6 +1,6 @@
 PY := .venv/bin/python
 
-.PHONY: data data-test schedules
+.PHONY: data data-test schedules web
 
 ## Rebuild the processed catalog from data/raw (≈2 min)
 data: schedules
@@ -45,9 +45,10 @@ ARGS ?=
 eval:
 	PYTHONPATH=backend $(PY) eval/run.py --bot $(BOT) $(ARGS)
 
-## Phase 11: replies must stay byte-identical with the LLM off (cards + template narrator refactor guard)
+## Refactor guard: with the LLM off, every one of the 653 eval replies must stay byte-identical to the baseline.
+## Re-baseline only after a reviewed, intended change: MEDIBOT_LLM=off $(PY) eval/snapshot.py --save <file>
 eval-snapshot:
-	MEDIBOT_LLM=off $(PY) eval/snapshot.py --check eval/snapshots/phase11_baseline_llm_off.jsonl
+	MEDIBOT_LLM=off $(PY) eval/snapshot.py --check eval/snapshots/baseline_llm_off.jsonl
 
 ## Phase 11: the same stratified turns with the LLM off and on (background; cached; quota-guarded)
 eval-llm-compare:
