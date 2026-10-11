@@ -1,0 +1,47 @@
+# MediBot on one VM: Caddy (HTTPS + web app) -> API -> Postgres/pgvector. Run from /opt/medibot on the server.
+services:
+  db:
+    image: pgvector/pgvector:pg18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: medibot
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: medibot
+    command: ["postgres", "-c", "shared_buffers=256MB", "-c", "effective_cache_size=1GB", "-c", "work_mem=16MB", "-c", "max_connections=40"]
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./dump:/dump:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medibot -d medibot"]
+      interval: 10s
+      retries: 10
+
+  api:
+    build: { context: .., dockerfile: deploy/Dockerfile.api }
+    image: medibot-api
+    restart: unless-stopped
+    depends_on: { db: { condition: service_healthy } }
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://medibot:${DB_PASSWORD}@db:5432/medibot
+      MEDIBOT_CORS_ORIGINS: https://${DOMAIN}
+      MEDIBOT_TRUSTED_PROXIES: 172.16.0.0/12      # only Caddy (docker network) may set X-Forwarded-For
+    volumes:
+      - ../data:/app/data                          # processed parquet, reference CSVs, model cache, sqlite caches
+    mem_limit: 3g
+
+  caddy:
+    image: caddy:2.10
+    restart: unless-stopped
+    depends_on: [api]
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../web/dist:/srv/web:ro
+      - caddy_data:/data
+
+volumes:
+  pgdata:
+  caddy_data:

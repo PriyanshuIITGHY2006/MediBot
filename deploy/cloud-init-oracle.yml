@@ -1,0 +1,14 @@
+#cloud-config
+# First boot of the MediBot VM on Oracle Cloud (Ampere A1, Ubuntu 24.04): Docker, swap, open 80/443, app folder.
+# Oracle's Ubuntu images ship an iptables REJECT rule; the subnet security list must ALSO allow TCP 80/443.
+package_update: true
+packages: [ca-certificates, curl, rsync, unattended-upgrades, iptables-persistent]
+runcmd:
+  - curl -fsSL https://get.docker.com | sh
+  - usermod -aG docker ubuntu
+  - iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
+  - iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
+  - netfilter-persistent save
+  - fallocate -l 4G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+  - echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  - mkdir -p /opt/medibot && chown ubuntu:ubuntu /opt/medibot

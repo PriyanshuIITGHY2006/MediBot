@@ -1,0 +1,11 @@
+#cloud-config
+# First boot of the MediBot VM: Docker + compose, 4 GB swap (the API holds ~2.1 GB), app folder, auto security updates.
+package_update: true
+packages: [ca-certificates, curl, rsync, unattended-upgrades]
+runcmd:
+  - curl -fsSL https://get.docker.com | sh
+  - usermod -aG docker azureuser
+  - fallocate -l 4G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+  - echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  - sysctl -w vm.swappiness=10 && echo 'vm.swappiness=10' > /etc/sysctl.d/99-medibot.conf
+  - mkdir -p /opt/medibot && chown azureuser:azureuser /opt/medibot
