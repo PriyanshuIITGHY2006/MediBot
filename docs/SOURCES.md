@@ -80,3 +80,10 @@ Also used: Drugs (Fifth Amendment) Rules 2026 (notified 09.06.2026) removing "Sy
 | **Curated FAQ** — 24 general topics | `data/reference/health_faq.jsonl` | Own text, each with an official source | Jan Aushadhi (PMBI), Schedules H/H1/X and OTC (CDSCO), red-line packs, antibiotics (WHO), banned FDCs, NPPA ceilings, PvPI side-effect reporting, eSanjeevani, Tele-MANAS, 112/108, ORS (WHO), storage / opened shelf life (NHS), expired-medicine disposal (US FDA), missed doses (NHS SPS), tablet splitting (US FDA), FSSAI, AYUSH, antacids with food / other medicines ([NHS – Antacids](https://www.nhs.uk/medicines/antacids/), reviewed 24 Mar 2023, checked 2026-10-11) |
 | **Verbatim label sentences** — UK SmPC, Strepsils Original Lozenges ([emc 5638](https://www.medicines.org.uk/emc/product/5638/smpc), revised 05/07/2022, checked 2026-10-11) | `data/reference/label_passages.jsonl` | Short factual quotations with attribution | Sections a monograph lacks (children's age limit, indication, contraindication, warnings), copied word for word. Dosing sentences are never copied. Cited as UK labelling that may differ from India. (MedlinePlus encyclopedia pages were rejected: their terms forbid use in retrieval indexes.) |
 | **Embedding model** BAAI/bge-small-en-v1.5 (384-d, ONNX via fastembed) | `data/interim/models/` | MIT | Local passage / query embeddings — no data leaves the machine |
+
+## Phase 9.7 additions (live prices)
+
+| Source | Where | Terms | Used for |
+|---|---|---|---|
+| **PharmEasy sitemaps + product pages** (pharmeasy.in, read 2026-10-11) | `data/raw/pharmacy_sitemaps/` → `data/processed/pharmacy_urls.parquet` | robots.txt allows product pages for `*`; terms of use generally forbid automated collection: low-volume, cached prototype | 65,928 product URLs matched to the catalog; live prices, verified per page |
+| **Truemeds sitemaps + product pages** (www.truemeds.in, read 2026-10-11) | same | same | 77,291 product URLs matched; live prices, verified per page |

@@ -73,6 +73,12 @@ def load_catalog() -> Catalog:
                                                          "url_netmeds"])
     s = pd.read_parquet(P / "product_safety.parquet")
     d = p.merge(s, on="product_id", how="left")
+    # PharmEasy / Truemeds product pages matched from their sitemaps (data/pipeline/pharmacy_urls.py)
+    extra: dict[str, list[tuple[str, str]]] = {}
+    if (P / "pharmacy_urls.parquet").exists():
+        for pl, u, pid in pd.read_parquet(P / "pharmacy_urls.parquet", columns=["platform", "url", "product_id"]) \
+                .itertuples(index=False):
+            extra.setdefault(pid, []).append((pl, u))
     products = {
         r.product_id: Product(r.product_id, r.name, r.manufacturer if isinstance(r.manufacturer, str) else None, r.form,
                               r.composition if isinstance(r.composition, str) else None,
@@ -81,7 +87,8 @@ def load_catalog() -> Catalog:
                               bool(r.requires_prescription), r.reasons or "", r.legal_refs or "",
                               bool(r.all_discontinued) if pd.notna(r.all_discontinued) else False,
                               tuple((pl, u) for pl, u in (("1mg", r.url_1mg), ("apollo", r.url_apollo),
-                                                          ("netmeds", r.url_netmeds)) if isinstance(u, str)))
+                                                          ("netmeds", r.url_netmeds)) if isinstance(u, str))
+                              + tuple(extra.get(r.product_id, ())))
         for r in d.itertuples()
     }
     ing = pd.read_parquet(P / "ingredient_safety.parquet")

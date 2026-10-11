@@ -8,6 +8,7 @@ Also: NPPA ceiling check on live/cached prices only (never on old snapshots, see
 from __future__ import annotations
 
 import json
+import re
 import os
 import sqlite3
 import threading
@@ -103,6 +104,10 @@ class PriceEngine:
                     self.stats["live"] += 1
                 else:
                     self.stats["live_failed"] += 1
+        # sitemap-matched platforms: show a quote only if the page shows the same product (name / composition)
+        for pl in [pl for pl, q in by_platform.items() if pl in VERIFIED_PLATFORMS and not page_matches(product, q)]:
+            self.stats["match_rejected"] = self.stats.get("match_rejected", 0) + 1
+            del by_platform[pl]
         for q in self.snapshot.get(product.product_id, []):  # fill platforms with no fresher quote
             if q["platform"] not in by_platform:
                 by_platform[q["platform"]] = dict(q, source="snapshot", in_stock=None)
@@ -120,6 +125,31 @@ class PriceEngine:
         if ceiling and q["price_per_unit_inr"] > ceiling * 1.0001:
             return {"ceiling_per_unit_inr": ceiling, "source": "NPPA ceiling price (NLEM 2022, as on March 2026)"}
         return None
+
+
+VERIFIED_PLATFORMS = {"pharmeasy", "truemeds"}
+SALT_WORDS = {"hydrochloride", "sodium", "potassium", "nitrate", "propionate", "dipropionate", "gluconate", "maleate",
+              "sulphate", "sulfate", "acetate", "citrate", "phosphate", "besylate", "succinate", "tartrate"}
+
+
+def page_matches(product: Product, q: dict) -> bool:
+    """The page is about this product: same brand + strength + form as our name, and, when the page lists a
+    composition, every one of our ingredients appears in it."""
+    from medibot.prices.matching import same_product
+    name = q.get("page_name")
+    if not name or not same_product(name, product.name):
+        return False
+    comp = (q.get("page_composition") or "").lower()
+    if comp and "other combinations" not in comp and product.ingredients:
+        # every active ingredient the PAGE lists must be in our composition (our list may also name an excipient,
+        # e.g. phenoxyethanol); compared on 6-letter word stems so beclomethasone == beclometasone
+        ours = {w[:6] for ing in product.ingredients for w in re.findall(r"[a-z]{4,}", ing.lower())}
+        theirs = [re.sub(r"\(.*?\)|[\d.]+\s*(mg|mcg|gm|g|ml|%|iu)?\b", " ", part) for part in comp.split("+")]
+        for part in theirs:
+            words = [w[:6] for w in re.findall(r"[a-z]{4,}", part) if w not in SALT_WORDS]
+            if words and not any(w in ours for w in words):
+                return False
+    return True
 
 
 def freshness(q: dict) -> str:

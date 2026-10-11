@@ -78,3 +78,7 @@ evidence:
 ## Reload only the hand-written passages (health_faq.jsonl + label_passages.jsonl) — seconds, no full rebuild
 evidence-curated:
 	systemd-run --user --scope -q -p MemoryMax=3G $(PY) db/build_evidence.py --curated
+
+## 9.7 PharmEasy + Truemeds product URLs from their sitemaps (polite, cached in data/raw/pharmacy_sitemaps)
+pharmacy-urls:
+	systemd-run --user --scope -q -p MemoryMax=6G $(PY) data/pipeline/pharmacy_urls.py

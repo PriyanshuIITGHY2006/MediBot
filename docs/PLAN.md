@@ -83,6 +83,7 @@
 - [x] 9.4 Refresher (`make prices-refresh`): top 300 → 545/602 pages in 5.4 min
 - [x] 9.5 Accuracy audit (`make prices-audit`): **B2 100%** (70/70) with live cache vs **0%** with dataset snapshots
 - [x] 9.6 NPPA ceiling flag on live/cached prices only; substitutes re-priced live; works with live off (eval) → `docs/PRICES.md`
+- [x] 9.7 PharmEasy + Truemeds: URLs from their sitemaps (no search), exact matching (136,992 URLs), per-page verification (94% of fetched pages verified, wrong products never shown), exact-host + path + robots.txt guards; **B2 100%** on all 5 pharmacies (128/128 pairs)
 
 ## Phase 10 — Health assistant + interactions
 - [x] 10.1 Evidence index (MID, SIDER, openFDA, curated FAQ, verbatim label sentences) by ingredient set & section — 95,243 passages, pgvector HNSW + full text (`make evidence`; `make evidence-curated` reloads hand-written passages in seconds)

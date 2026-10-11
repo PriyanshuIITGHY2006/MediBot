@@ -51,7 +51,7 @@ def refresh(top: int) -> dict:
     jobs = [(pl, u) for p in prods for pl, u in p.urls
             if not ((h := engine._cached(u)) and time.time() - h[1] < CACHE_TTL)]
     t0 = time.time()
-    with ThreadPoolExecutor(max_workers=3) as ex:  # one worker per host in practice; Fetcher spaces requests
+    with ThreadPoolExecutor(max_workers=5) as ex:  # one worker per pharmacy; Fetcher spaces requests per host
         results = list(ex.map(lambda pu: engine._fetch_and_store(*pu), jobs))
     ok = sum(1 for r in results if r)
     return {"products": len(prods), "fetched": len(jobs), "ok": ok, "failed": len(jobs) - ok,

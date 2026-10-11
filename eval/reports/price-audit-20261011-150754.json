@@ -1,0 +1,1387 @@
+{
+ "report": {
+  "sampled_products": 60,
+  "pairs": 144,
+  "comparable": 128,
+  "price_match_accuracy": 1.0,
+  "accuracy_by_source": {
+   "cached": 1.0
+  },
+  "by_platform": {
+   "1mg": 1.0,
+   "apollo": 1.0,
+   "netmeds": 1.0,
+   "pharmeasy": 1.0,
+   "truemeds": 1.0
+  },
+  "live_failed": 1,
+  "delisted": 12,
+  "not_comparable": 0,
+  "no_shown_price": 3
+ },
+ "rows": [
+  {
+   "product": "Zomelis Met 50mg/500mg Tablet",
+   "platform": "1mg",
+   "shown": 24.5,
+   "live": 24.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:46+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Zomelis Met 50mg/500mg Tablet",
+   "platform": "pharmeasy",
+   "shown": 10.05,
+   "live": 10.05,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:46+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Lotion",
+   "platform": "1mg",
+   "shown": 78.5,
+   "live": 78.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:36+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Lotion",
+   "platform": "apollo",
+   "shown": 280.0,
+   "live": 280.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:37+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Lotion",
+   "platform": "netmeds",
+   "shown": 5.13,
+   "live": 5.13,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:37+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Lotion",
+   "platform": "pharmeasy",
+   "shown": 5.15,
+   "live": 5.15,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:36+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Pentab-D Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Pentab-D Tablet",
+   "platform": "apollo",
+   "shown": 18.5,
+   "live": 18.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:07+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Pentab-D Tablet",
+   "platform": "pharmeasy",
+   "shown": 9.17,
+   "live": 9.17,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:06+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Atorlip 5 Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Atorlip 5 Tablet",
+   "platform": "pharmeasy",
+   "shown": 6.89,
+   "live": 6.89,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:59+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Atorlip 5 Tablet",
+   "platform": "truemeds",
+   "shown": 5.16,
+   "live": 5.16,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:59+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glucoryl-MV 2/0.3 Tablet SR",
+   "platform": "1mg",
+   "shown": 17.47,
+   "live": 17.47,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:11+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Scabiped Lotion",
+   "platform": "apollo",
+   "shown": 78.0,
+   "live": 78.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:59+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Scabiped Lotion",
+   "platform": "pharmeasy",
+   "shown": 1.0,
+   "live": 1.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:58+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Respicure-D Syrup",
+   "platform": "1mg",
+   "shown": 108.0,
+   "live": 108.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:09+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Citralka Liquid",
+   "platform": "1mg",
+   "shown": 132.0,
+   "live": 132.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:50+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Citralka Liquid",
+   "platform": "apollo",
+   "shown": 143.0,
+   "live": 143.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:52+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Citralka Liquid",
+   "platform": "netmeds",
+   "shown": 1.04,
+   "live": 1.04,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:52+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Citralka Liquid",
+   "platform": "pharmeasy",
+   "status": "no_shown_price",
+   "live": 145.16
+  },
+  {
+   "product": "Hexidine Mouth Wash",
+   "platform": "1mg",
+   "shown": 81.5,
+   "live": 81.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:24+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Hexidine Mouth Wash",
+   "platform": "apollo",
+   "shown": 363.5,
+   "live": 363.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:24+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Hexidine Mouth Wash",
+   "platform": "pharmeasy",
+   "shown": 0.74,
+   "live": 0.74,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:24+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "1mg",
+   "shown": 66.1,
+   "live": 66.1,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "apollo",
+   "shown": 105.0,
+   "live": 105.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:50+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Terbest Cream",
+   "platform": "netmeds",
+   "shown": 3.99,
+   "live": 3.99,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:50+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tacroz Forte Ointment",
+   "platform": "1mg",
+   "shown": 793.0,
+   "live": 793.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:27+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tacroz Forte Ointment",
+   "platform": "apollo",
+   "shown": 853.0,
+   "live": 853.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:28+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tacroz Forte Ointment",
+   "platform": "netmeds",
+   "shown": 45.89,
+   "live": 45.89,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:28+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Strafos Cream",
+   "platform": "1mg",
+   "shown": 128.0,
+   "live": 128.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:26+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Strafos Cream",
+   "platform": "pharmeasy",
+   "shown": 7.4,
+   "live": 7.4,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:26+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Strafos Cream",
+   "platform": "truemeds",
+   "shown": 7.5,
+   "live": 7.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:27+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Arip MT 30 Tablet",
+   "platform": "1mg",
+   "shown": 20.8,
+   "live": 20.8,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:01+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Arip MT 30 Tablet",
+   "platform": "apollo",
+   "shown": 42.5,
+   "live": 42.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:02+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Arip MT 30 Tablet",
+   "platform": "truemeds",
+   "shown": 18.04,
+   "live": 18.04,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:02+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Viveta Cream",
+   "platform": "1mg",
+   "shown": 194.06,
+   "live": 194.06,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:56+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Viveta Cream",
+   "platform": "apollo",
+   "shown": 194.0,
+   "live": 194.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:58+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Viveta Cream",
+   "platform": "pharmeasy",
+   "shown": 14.72,
+   "live": 14.72,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:57+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Viveta Cream",
+   "platform": "truemeds",
+   "shown": 16.0,
+   "live": 16.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:58+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Microshield 4% Surgical Handwash",
+   "platform": "1mg",
+   "shown": 634.0,
+   "live": 634.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:10+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Microshield 4% Surgical Handwash",
+   "platform": "apollo",
+   "shown": 240.0,
+   "live": 240.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:11+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Keto Gold Soap",
+   "platform": "1mg",
+   "shown": 333.0,
+   "live": 333.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:43+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lupizol Cream",
+   "platform": "1mg",
+   "shown": 145.0,
+   "live": 145.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:57+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lupizol Cream",
+   "platform": "apollo",
+   "shown": 429.0,
+   "live": 429.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:57+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lupizol Cream",
+   "platform": "pharmeasy",
+   "shown": 14.81,
+   "live": 14.81,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:57+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Vintel 40 Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Vintel 40 Tablet",
+   "platform": "apollo",
+   "shown": 7.07,
+   "live": 7.07,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:00+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Vintel 40 Tablet",
+   "platform": "pharmeasy",
+   "shown": 7.69,
+   "live": 7.69,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:00+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Taxim-O Forte Dry Syrup",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Rantac Injection 2ml",
+   "platform": "1mg",
+   "shown": 7.6,
+   "live": 7.6,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:14+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Rantac Injection 2ml",
+   "platform": "pharmeasy",
+   "status": "no_shown_price",
+   "live": 6.9
+  },
+  {
+   "product": "Xarelto 15mg Tablet",
+   "platform": "1mg",
+   "shown": 63.93,
+   "live": 63.93,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:16+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Xarelto 15mg Tablet",
+   "platform": "netmeds",
+   "shown": 65.32,
+   "live": 65.32,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:17+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Xarelto 15mg Tablet",
+   "platform": "pharmeasy",
+   "shown": 60.18,
+   "live": 60.18,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:16+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Medsop Soap",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "1mg",
+   "shown": 234.0,
+   "live": 234.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:14+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "apollo",
+   "shown": 234.0,
+   "live": 234.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:15+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Numbex Cream",
+   "platform": "truemeds",
+   "shown": 16.51,
+   "live": 16.51,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:15+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Basalog 100IU/ml Refill Cartridge",
+   "platform": "1mg",
+   "shown": 544.0,
+   "live": 544.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ethimom Cream",
+   "platform": "1mg",
+   "shown": 150.0,
+   "live": 150.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:45+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ethimom Cream",
+   "platform": "apollo",
+   "shown": 150.0,
+   "live": 150.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:46+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ethimom Cream",
+   "platform": "netmeds",
+   "status": "live_failed"
+  },
+  {
+   "product": "Lumiza 1% Cream",
+   "platform": "1mg",
+   "shown": 141.0,
+   "live": 141.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:45+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lumiza 1% Cream",
+   "platform": "apollo",
+   "shown": 178.0,
+   "live": 178.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:46+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "apollo",
+   "shown": 159.0,
+   "live": 159.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:28+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "netmeds",
+   "shown": 4.73,
+   "live": 4.73,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:29+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Nailrox Cream",
+   "platform": "pharmeasy",
+   "shown": 3.84,
+   "live": 3.84,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:28+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "netmeds",
+   "shown": 15.33,
+   "live": 15.33,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:34+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Zitran 200 Capsule",
+   "platform": "pharmeasy",
+   "shown": 14.47,
+   "live": 14.47,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:33+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Arip MT 15 Tablet",
+   "platform": "1mg",
+   "shown": 11.8,
+   "live": 11.8,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:48+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Arip MT 15 Tablet",
+   "platform": "apollo",
+   "shown": 23.53,
+   "live": 23.53,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Arip MT 15 Tablet",
+   "platform": "truemeds",
+   "shown": 10.28,
+   "live": 10.28,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Rabetero-L Capsule SR",
+   "platform": "1mg",
+   "shown": 8.73,
+   "live": 8.73,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:19+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glycinorm 40 Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Glycinorm 40 Tablet",
+   "platform": "apollo",
+   "shown": 9.2,
+   "live": 9.2,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:05+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glycinorm 40 Tablet",
+   "platform": "netmeds",
+   "shown": 6.02,
+   "live": 6.02,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:05+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glycinorm 40 Tablet",
+   "platform": "pharmeasy",
+   "shown": 5.81,
+   "live": 5.81,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:04+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "1mg",
+   "shown": 6.07,
+   "live": 6.07,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:41+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "apollo",
+   "shown": 6.2,
+   "live": 6.2,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:41+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glimy 2 Tablet",
+   "platform": "pharmeasy",
+   "shown": 5.87,
+   "live": 5.87,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:41+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glador M4 Forte Tablet PR",
+   "platform": "1mg",
+   "shown": 9.8,
+   "live": 9.8,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:51+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ultravex Cream",
+   "platform": "1mg",
+   "shown": 318.0,
+   "live": 318.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ultravex Cream",
+   "platform": "apollo",
+   "shown": 3949.0,
+   "live": 3949.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:42+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ultravex Cream",
+   "platform": "netmeds",
+   "shown": 10.51,
+   "live": 10.51,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:41+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ultravex Cream",
+   "platform": "pharmeasy",
+   "shown": 10.65,
+   "live": 10.65,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amfocin Cream",
+   "platform": "1mg",
+   "shown": 163.0,
+   "live": 163.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:52+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amfocin Cream",
+   "platform": "apollo",
+   "shown": 191.0,
+   "live": 191.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:54+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Rantac Mps Oral Suspension Elaichi Sugar Free",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Valance 500 Oral Solution Colourless",
+   "platform": "1mg",
+   "shown": 924.0,
+   "live": 924.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:23+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glucagen 1mg Injection",
+   "platform": "1mg",
+   "shown": 683.0,
+   "live": 683.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:30+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glucagen 1mg Injection",
+   "platform": "truemeds",
+   "shown": 742.5,
+   "live": 742.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:30+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Ocuvir Skin Cream",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Ocuvir Skin Cream",
+   "platform": "netmeds",
+   "shown": 10.99,
+   "live": 10.99,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:09+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Levocet Tablet",
+   "platform": "1mg",
+   "shown": 4.82,
+   "live": 4.82,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:52+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Levocet Tablet",
+   "platform": "apollo",
+   "shown": 5.25,
+   "live": 5.25,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:54+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Jubiglim M 2 Tablet PR",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Mixderm Cream",
+   "platform": "1mg",
+   "shown": 21.68,
+   "live": 21.68,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:22+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Mixderm Cream",
+   "platform": "truemeds",
+   "status": "no_shown_price",
+   "live": 17.34
+  },
+  {
+   "product": "Avas 40 Tablet",
+   "platform": "1mg",
+   "shown": 18.9,
+   "live": 18.9,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:32+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Avas 40 Tablet",
+   "platform": "apollo",
+   "shown": 20.6,
+   "live": 20.6,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:32+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Avas 40 Tablet",
+   "platform": "pharmeasy",
+   "shown": 16.5,
+   "live": 16.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:32+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Avas 40 Tablet",
+   "platform": "truemeds",
+   "shown": 16.5,
+   "live": 16.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:33+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Monoguard Cream",
+   "platform": "1mg",
+   "shown": 125.0,
+   "live": 125.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:47+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Monoguard Cream",
+   "platform": "apollo",
+   "shown": 150.0,
+   "live": 150.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:48+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Monoguard Cream",
+   "platform": "netmeds",
+   "shown": 13.35,
+   "live": 13.35,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Janumet 50mg/1000mg Tablet",
+   "platform": "1mg",
+   "status": "delisted"
+  },
+  {
+   "product": "Janumet 50mg/1000mg Tablet",
+   "platform": "pharmeasy",
+   "shown": 18.8,
+   "live": 18.8,
+   "source": "cached",
+   "observed": "2026-10-11T09:35:03+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "LT-Mac Cream",
+   "platform": "1mg",
+   "shown": 295.0,
+   "live": 295.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:20+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "LT-Mac Cream",
+   "platform": "truemeds",
+   "shown": 12.86,
+   "live": 12.86,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:20+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Oxicojen Cream",
+   "platform": "1mg",
+   "shown": 196.0,
+   "live": 196.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:24+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Oxicojen Cream",
+   "platform": "apollo",
+   "shown": 198.5,
+   "live": 198.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:26+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Oxicojen Cream",
+   "platform": "netmeds",
+   "shown": 5.9,
+   "live": 5.9,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:25+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "T-Bact 2% Ointment",
+   "platform": "1mg",
+   "shown": 109.04,
+   "live": 109.04,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:49+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Reactin 100 SR Tablet",
+   "platform": "1mg",
+   "shown": 6.98,
+   "live": 6.98,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:16+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tbis 0.1% Ointment",
+   "platform": "1mg",
+   "shown": 527.0,
+   "live": 527.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:38+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tbis 0.1% Ointment",
+   "platform": "apollo",
+   "shown": 1484.5,
+   "live": 1484.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:38+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tbis 0.1% Ointment",
+   "platform": "netmeds",
+   "shown": 51.54,
+   "live": 51.54,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Vilmax-M 1000 Tablet",
+   "platform": "1mg",
+   "shown": 9.49,
+   "live": 9.49,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:47+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Vilmax-M 1000 Tablet",
+   "platform": "apollo",
+   "shown": 11.0,
+   "live": 11.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:48+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Laxan Oral Solution",
+   "platform": "1mg",
+   "shown": 314.28,
+   "live": 314.28,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:09+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Laxan Oral Solution",
+   "platform": "apollo",
+   "shown": 131.0,
+   "live": 131.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:09+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glocan Cream",
+   "platform": "1mg",
+   "shown": 37.0,
+   "live": 37.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Glocan Cream",
+   "platform": "apollo",
+   "shown": 77.5,
+   "live": 77.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:13+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Montina-L Syrup",
+   "platform": "1mg",
+   "shown": 50.1,
+   "live": 50.1,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:11+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Osolac Oral Solution",
+   "platform": "1mg",
+   "shown": 88.4,
+   "live": 88.4,
+   "source": "cached",
+   "observed": "2026-10-11T09:33:05+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Picon Cream",
+   "platform": "1mg",
+   "shown": 1654.0,
+   "live": 1654.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:38+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Picon Cream",
+   "platform": "apollo",
+   "shown": 727.0,
+   "live": 727.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Picon Cream",
+   "platform": "netmeds",
+   "shown": 64.72,
+   "live": 64.72,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:39+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "1mg",
+   "shown": 170.0,
+   "live": 170.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:36+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "apollo",
+   "shown": 120.0,
+   "live": 120.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:40+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Lulirx Cream",
+   "platform": "netmeds",
+   "shown": 5.78,
+   "live": 5.78,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:38+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "1mg",
+   "shown": 290.0,
+   "live": 290.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "apollo",
+   "shown": 107.5,
+   "live": 107.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:13+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "netmeds",
+   "shown": 9.39,
+   "live": 9.39,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:14+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "pharmeasy",
+   "shown": 8.62,
+   "live": 8.62,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Amrolstar Cream",
+   "platform": "truemeds",
+   "shown": 8.44,
+   "live": 8.44,
+   "source": "cached",
+   "observed": "2026-10-11T09:32:13+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Livoluk Oral Solution",
+   "platform": "1mg",
+   "shown": 124.0,
+   "live": 124.0,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Livoluk Oral Solution",
+   "platform": "apollo",
+   "shown": 128.5,
+   "live": 128.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:31:12+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tenovate GN Cream",
+   "platform": "1mg",
+   "shown": 29.3,
+   "live": 29.3,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:28+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tenovate GN Cream",
+   "platform": "apollo",
+   "shown": 103.5,
+   "live": 103.5,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:30+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tenovate GN Cream",
+   "platform": "netmeds",
+   "shown": 4.61,
+   "live": 4.61,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:30+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  },
+  {
+   "product": "Tenovate GN Cream",
+   "platform": "pharmeasy",
+   "shown": 4.44,
+   "live": 4.44,
+   "source": "cached",
+   "observed": "2026-10-11T09:34:28+00:00",
+   "rel_diff": 0.0,
+   "status": "match"
+  }
+ ]
+}
