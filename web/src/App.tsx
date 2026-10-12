@@ -282,6 +282,17 @@ export default function App() {
     if (session && m.res?.turn_id) api.feedback(session, m.res.turn_id, r).catch(() => { /* rating is best-effort */ })
   }
   const open = (id: string) => { setFocus(id); setSheetOpen(true); setSide(true) }
+  // New chat = a new server session too, so the previous conversation's medicine can't carry into the next
+  // question ("what should I take?" was answered about the last medicine discussed). The disclaimer was already
+  // accepted in this browser, so the new session is acknowledged right away and onboarding is not shown again.
+  const newChat = async () => {
+    setMsgs([]); setFocus(null); setTab('chat'); setSheetOpen(false)
+    try {
+      const s = await api.start()
+      await api.ack(s.session_id)
+      store.set('mb-session', s.session_id); setSession(s.session_id)
+    } catch { /* offline: keep the old session; the next send shows the error */ }
+  }
   const reset = async () => {
     if (session) api.forget(session).catch(() => { /* */ })
     store.del('mb-session'); store.del('mb-ack')
@@ -302,7 +313,7 @@ export default function App() {
   return (
     <div className="relative flex h-full">
       {tab === 'chat' && !msgs.length && <Aurora />}
-      <NavRail tab={tab} onTab={goTab} onNew={() => { setMsgs([]); setFocus(null); setTab('chat') }} onSearch={() => setPalette(true)} onForget={reset} collapsed={navMini} onCollapse={toggleNav} />
+      <NavRail tab={tab} onTab={goTab} onNew={newChat} onSearch={() => setPalette(true)} onForget={reset} collapsed={navMini} onCollapse={toggleNav} />
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
       <header className="flex h-14 shrink-0 items-center justify-between gap-2 px-3 sm:px-4">
         <div className="flex min-w-0 items-center gap-2">
@@ -315,7 +326,7 @@ export default function App() {
           {tab === 'chat' && focus && !side && <Button variant="ghost" className="max-lg:hidden" onClick={toggleSide} aria-label="Show medicine panel" title="Show panel (Ctrl+\\)"><PanelRightOpen className="size-4" /></Button>}
           <Button variant="ghost" onClick={() => setLang(lang === 'hi' ? 'en' : 'hi')} aria-label={lang === 'hi' ? 'Switch to English' : 'हिंदी में देखें'} title={lang === 'hi' ? 'English' : 'हिंदी'}><span className="text-[13px] font-semibold">{lang === 'hi' ? 'EN' : 'हिं'}</span></Button>
           <Button variant="ghost" onClick={() => setDark(d => !d)} aria-label="Toggle dark mode">{dark ? <Sun className="size-4" /> : <Moon className="size-4" />}</Button>
-          <Button variant="ghost" className="md:hidden" onClick={() => { setMsgs([]); setFocus(null); setTab('chat') }} aria-label="New chat" title="New chat"><SquarePen className="size-4" /></Button>
+          <Button variant="ghost" className="md:hidden" onClick={newChat} aria-label="New chat" title="New chat"><SquarePen className="size-4" /></Button>
         </div>
       </header>
 
